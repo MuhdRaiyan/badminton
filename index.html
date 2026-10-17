@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Badminton Tactical Quest: Find the Open Space!</title>
+  <title>Badminton Singles Tactical Decision Game</title>
   <style>
     :root {
       --court-green: #2e7d32;
@@ -26,7 +26,7 @@
 
     body {
       margin: 0;
-      padding: 16px;
+      padding: 14px;
       font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
       background-color: var(--bg-color);
       color: var(--text-dark);
@@ -38,12 +38,13 @@
 
     header {
       text-align: center;
-      max-width: 900px;
+      max-width: 960px;
       margin-bottom: 12px;
+      width: 100%;
     }
 
     h1 {
-      margin: 0 0 6px 0;
+      margin: 0 0 4px 0;
       font-size: 1.55rem;
       color: #1b5e20;
     }
@@ -54,16 +55,62 @@
       color: #546e7a;
     }
 
+    /* Top Stats Bar */
+    .stats-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #ffffff;
+      border: 1px solid #cfd8dc;
+      padding: 8px 16px;
+      border-radius: 10px;
+      margin-top: 8px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    }
+
+    .score-badge {
+      background: #e8f5e9;
+      color: #2e7d32;
+      padding: 4px 12px;
+      border-radius: 20px;
+      border: 1px solid #a5d6a7;
+    }
+
+    .progress-badge {
+      background: #e3f2fd;
+      color: #1565c0;
+      padding: 4px 12px;
+      border-radius: 20px;
+      border: 1px solid #90caf9;
+    }
+
+    .btn-report-quick {
+      background: #607d8b;
+      color: #fff;
+      border: none;
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+    .btn-report-quick:hover {
+      background: #455a64;
+    }
+
     .game-container {
       display: flex;
       flex-direction: row;
-      gap: 20px;
+      gap: 18px;
       max-width: 1020px;
       width: 100%;
       background: var(--card-bg);
-      padding: 18px;
+      padding: 16px;
       border-radius: 14px;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
       align-items: flex-start;
     }
 
@@ -73,19 +120,19 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      width: 100%;
+      position: relative;
     }
 
     .court-wrapper {
       position: relative;
       width: 100%;
-      max-width: 380px;
+      max-width: 375px;
       aspect-ratio: 1 / 1.7;
       background: var(--court-green);
       border-radius: 10px;
       overflow: hidden;
       border: 4px solid #144a18;
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.18);
       touch-action: none;
     }
 
@@ -95,159 +142,142 @@
       display: block;
     }
 
-    /* Opponent Reach Radius Indicator */
-    .reach-zone {
-      position: absolute;
-      border-radius: 50%;
-      background: rgba(229, 57, 53, 0.16);
-      border: 2px dashed rgba(229, 57, 53, 0.7);
-      transform: translate(-50%, -50%);
-      pointer-events: none;
-      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      z-index: 3;
-    }
-
-    /* Incoming shot guide line */
-    .incoming-path {
-      stroke: rgba(255, 235, 59, 0.65);
-      stroke-width: 1.8;
-      stroke-dasharray: 3 2;
-      animation: dash 1s linear infinite;
-    }
-
-    @keyframes dash {
-      to {
-        stroke-dashoffset: -10;
-      }
-    }
-
-    /* Opponent Avatar: Distinct Red Triangle */
-    .opponent-triangle {
+    /* Opponent - Red Triangle Avatar */
+    .entity-opponent {
       position: absolute;
       width: 38px;
       height: 38px;
+      background: #e53935;
+      clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
       transform: translate(-50%, -50%);
       pointer-events: none;
       transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      z-index: 5;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      filter: drop-shadow(0px 3px 5px rgba(0, 0, 0, 0.35));
-    }
-
-    .opponent-shape {
-      width: 100%;
-      height: 100%;
-      background: #e53935;
-      clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
-      border: 1px solid #ffffff;
+      z-index: 6;
       display: flex;
       align-items: flex-end;
       justify-content: center;
-      padding-bottom: 3px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
     }
 
-    .opponent-shape span {
-      font-size: 10px;
-      font-weight: 800;
-      color: #ffffff;
+    .entity-opponent::after {
+      content: 'OPP';
+      font-size: 8px;
+      font-weight: 900;
+      color: #fff;
+      margin-bottom: 3px;
       letter-spacing: 0.5px;
     }
 
-    /* Player Avatar: Blue Circle */
-    .player-avatar {
+    /* Opponent Reach Zone */
+    .opponent-reach-zone {
+      position: absolute;
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      border: 2px dashed rgba(255, 23, 68, 0.85);
+      background: rgba(255, 23, 68, 0.15);
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      transition: all 0.4s ease;
+      z-index: 3;
+    }
+
+    /* Player Avatar - Round Blue */
+    .entity-player {
       position: absolute;
       width: 38px;
       height: 38px;
       border-radius: 50%;
       background: #1976d2;
-      border: 2.5px solid #ffffff;
+      border: 2px solid #ffffff;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      transition: all 0.4s ease;
+      z-index: 6;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 11px;
+      color: #fff;
       font-weight: bold;
-      color: #ffffff;
-      transform: translate(-50%, -50%);
-      pointer-events: none;
-      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      font-size: 10px;
       box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-      z-index: 5;
     }
 
-    /* Shuttlecock Token: Authentic Draggable Shuttlecock SVG */
+    /* Draggable Shuttlecock Token */
     .shuttlecock-token {
       position: absolute;
       width: 44px;
       height: 44px;
       border-radius: 50%;
       background: #ffffff;
-      border: 3px solid #ffb300;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
+      border: 2.5px solid #fbc02d;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: grab;
       z-index: 20;
       touch-action: none;
-      transform: translate(-50%, -50%);
-      transition: transform 0.1s ease, border-color 0.2s;
+      transition: transform 0.1s ease;
     }
 
     .shuttlecock-token:active {
       cursor: grabbing;
-      transform: translate(-50%, -50%) scale(1.18);
-      border-color: #f57c00;
+      transform: scale(1.18);
     }
 
     .shuttlecock-token.landed {
-      animation: shuttlePulse 1.2s infinite alternate;
+      animation: pulse 1s infinite alternate;
     }
 
-    @keyframes shuttlePulse {
-      0% { transform: translate(-50%, -50%) scale(1); }
-      100% { transform: translate(-50%, -50%) scale(1.14); }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      100% { transform: scale(1.14); }
     }
 
+    /* Shuttlecock Vector Icon SVG */
     .shuttle-svg {
       width: 28px;
       height: 28px;
-      display: block;
       pointer-events: none;
     }
 
-    /* Legend icon shapes */
-    .legend-triangle {
-      width: 24px;
-      height: 24px;
-      background: #e53935;
-      clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
-      display: inline-block;
+    /* Trajectory arrow from opponent to incoming shuttle */
+    .incoming-path {
+      position: absolute;
+      pointer-events: none;
+      stroke: rgba(255, 255, 255, 0.55);
+      stroke-width: 2;
+      stroke-dasharray: 4 3;
+      z-index: 2;
     }
 
-    .legend-circle {
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      background: #1976d2;
-      display: inline-block;
-    }
-
-    .legend-shuttle {
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      background: #ffffff;
-      border: 1.5px solid #ffb300;
+    /* Court Corner Info Button */
+    .court-info-corner {
+      position: absolute;
+      bottom: 8px;
+      right: 8px;
+      background: rgba(0, 0, 0, 0.65);
+      color: #fff;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      cursor: pointer;
       display: flex;
       align-items: center;
-      justify-content: center;
+      gap: 4px;
+      z-index: 10;
+      backdrop-filter: blur(4px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: background 0.2s;
+    }
+    .court-info-corner:hover {
+      background: rgba(0, 0, 0, 0.85);
     }
 
-    /* Control Panel & Legend */
+    /* Right Section: Details, Legend & Feedback */
     .info-panel {
-      flex: 1;
+      flex: 1.1;
       display: flex;
       flex-direction: column;
       gap: 12px;
@@ -257,7 +287,18 @@
       background: #e8f5e9;
       border-left: 5px solid #2e7d32;
       padding: 12px 14px;
-      border-radius: 8px;
+      border-radius: 6px;
+    }
+
+    .incoming-badge {
+      display: inline-block;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #0d47a1;
+      background: #e3f2fd;
+      padding: 3px 8px;
+      border-radius: 4px;
+      margin-bottom: 6px;
     }
 
     .scenario-title {
@@ -270,30 +311,18 @@
       align-items: center;
     }
 
-    .incoming-badge {
-      display: inline-block;
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: #0d47a1;
-      background: #e3f2fd;
-      border: 1px solid #bbdefb;
-      padding: 3px 7px;
-      border-radius: 12px;
-      margin-top: 5px;
-    }
-
     .scenario-desc {
-      font-size: 0.92rem;
-      line-height: 1.4;
+      font-size: 0.93rem;
+      line-height: 1.35;
       color: #37474f;
-      margin: 4px 0 0 0;
+      margin: 0;
     }
 
     .legend-box {
       background: #fafafa;
       border: 1px solid #e0e0e0;
       border-radius: 8px;
-      padding: 10px 14px;
+      padding: 9px 12px;
     }
 
     .legend-title {
@@ -302,14 +331,17 @@
       letter-spacing: 0.5px;
       font-weight: bold;
       color: #78909c;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
     .legend-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 8px;
-      font-size: 0.86rem;
+      gap: 6px;
+      font-size: 0.84rem;
     }
 
     .legend-item {
@@ -318,9 +350,38 @@
       gap: 8px;
     }
 
+    .legend-badge {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    .legend-triangle {
+      width: 22px;
+      height: 22px;
+      background: #e53935;
+      clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+      flex-shrink: 0;
+    }
+
+    .legend-circle-dash {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 2px dashed #e53935;
+      background: rgba(229, 57, 53, 0.15);
+      flex-shrink: 0;
+    }
+
     /* Feedback Display */
     .feedback-card {
-      min-height: 92px;
+      min-height: 90px;
       padding: 12px;
       border-radius: 8px;
       background: #eceff1;
@@ -345,12 +406,12 @@
 
     .feedback-status {
       font-weight: 700;
-      font-size: 0.98rem;
+      font-size: 1rem;
       margin-bottom: 3px;
     }
 
     .feedback-msg {
-      font-size: 0.88rem;
+      font-size: 0.9rem;
       line-height: 1.35;
       margin: 0;
     }
@@ -359,12 +420,11 @@
     .button-group {
       display: flex;
       gap: 8px;
-      margin-top: 4px;
     }
 
     button {
       flex: 1;
-      padding: 10px 12px;
+      padding: 9px 12px;
       font-size: 0.92rem;
       font-weight: bold;
       border: none;
@@ -377,25 +437,188 @@
       transform: translateY(1px);
     }
 
-    .btn-nav {
+    .btn-prev {
+      background: #eceff1;
+      color: #455a64;
+      flex: 0.8;
+    }
+    .btn-prev:hover {
+      background: #cfd8dc;
+    }
+
+    .btn-next {
       background: #1976d2;
       color: white;
     }
 
-    .btn-nav:hover {
+    .btn-next:hover {
       background: #1565c0;
     }
 
     .btn-reset {
       background: #cfd8dc;
       color: #37474f;
+      flex: 0.9;
     }
 
     .btn-reset:hover {
       background: #b0bec5;
     }
 
-    @media (max-width: 720px) {
+    /* Modal dialogs */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      padding: 16px;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: #ffffff;
+      border-radius: 12px;
+      max-width: 650px;
+      width: 100%;
+      max-height: 88vh;
+      overflow-y: auto;
+      padding: 22px;
+      position: relative;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 14px;
+      right: 16px;
+      background: transparent;
+      border: none;
+      font-size: 1.3rem;
+      font-weight: bold;
+      cursor: pointer;
+      color: #78909c;
+      width: auto;
+      padding: 0;
+    }
+
+    .modal-title {
+      color: #1b5e20;
+      margin-top: 0;
+      margin-bottom: 12px;
+      font-size: 1.35rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .guide-section {
+      margin-bottom: 16px;
+      border-bottom: 1px solid #eceff1;
+      padding-bottom: 12px;
+    }
+
+    .guide-section:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+    }
+
+    .guide-section h3 {
+      color: #1976d2;
+      margin: 0 0 6px 0;
+      font-size: 1.05rem;
+    }
+
+    .guide-section p {
+      margin: 4px 0 8px 0;
+      font-size: 0.92rem;
+      line-height: 1.4;
+      color: #455a64;
+    }
+
+    .court-diagram-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 10px 0;
+    }
+
+    .court-card-info {
+      background: #f1f8e9;
+      border: 1px solid #c8e6c9;
+      border-radius: 8px;
+      padding: 10px;
+      font-size: 0.85rem;
+    }
+
+    .court-card-info.doubles {
+      background: #e3f2fd;
+      border-color: #bbdefb;
+    }
+
+    .court-card-info strong {
+      display: block;
+      color: #2e7d32;
+      margin-bottom: 4px;
+      font-size: 0.9rem;
+    }
+
+    .court-card-info.doubles strong {
+      color: #1565c0;
+    }
+
+    /* Teacher Report Table */
+    .report-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+      font-size: 0.85rem;
+    }
+
+    .report-table th, .report-table td {
+      border: 1px solid #cfd8dc;
+      padding: 6px 8px;
+      text-align: left;
+    }
+
+    .report-table th {
+      background: #eceff1;
+      color: #37474f;
+    }
+
+    .badge-correct {
+      color: #2e7d32;
+      font-weight: bold;
+    }
+
+    .badge-retry {
+      color: #f57c00;
+      font-weight: bold;
+    }
+
+    .badge-unattempted {
+      color: #90a4ae;
+      font-style: italic;
+    }
+
+    .btn-copy-report {
+      background: #2e7d32;
+      color: white;
+      margin-top: 14px;
+      width: 100%;
+      padding: 10px;
+    }
+    .btn-copy-report:hover {
+      background: #1b5e20;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
       .game-container {
         flex-direction: column;
         align-items: center;
@@ -406,6 +629,9 @@
       .info-panel {
         width: 100%;
       }
+      .court-diagram-grid {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
@@ -413,7 +639,14 @@
 
   <header>
     <h1>🏸 Badminton Singles: Smart Placement Challenge!</h1>
-    <p class="subtitle">Where did your opponent hit the shuttlecock? Return it into the open space!</p>
+    <p class="subtitle">Read the opponent's position and hit the shuttlecock into open space away from their reach!</p>
+    
+    <!-- Top Stats Bar -->
+    <div class="stats-bar">
+      <span class="progress-badge" id="topProgressBadge">Scenario 1 / 21</span>
+      <span class="score-badge" id="topScoreBadge">Score: 0 / 21</span>
+      <button type="button" class="btn-report-quick" id="btnOpenReport">📊 Review History & Score</button>
+    </div>
   </header>
 
   <div class="game-container">
@@ -422,67 +655,65 @@
       <div class="court-wrapper" id="courtWrapper">
         <!-- SVG Court Lines (Badminton Singles Proportion) -->
         <svg class="court-svg" viewBox="0 0 100 170" preserveAspectRatio="none">
-          <!-- Outer Baseline -->
+          <!-- Singles Outer Boundary -->
           <rect x="5" y="5" width="90" height="160" fill="none" stroke="#ffffff" stroke-width="1.8" />
 
-          <!-- Singles Side Lines -->
-          <line x1="11" y1="5" x2="11" y2="165" stroke="#ffffff" stroke-width="1.2" opacity="0.9" />
-          <line x1="89" y1="5" x2="89" y2="165" stroke="#ffffff" stroke-width="1.2" opacity="0.9" />
+          <!-- Singles Side Lines (Inner lines) -->
+          <line x1="11" y1="5" x2="11" y2="165" stroke="#ffffff" stroke-width="1.3" opacity="0.95" />
+          <line x1="89" y1="5" x2="89" y2="165" stroke="#ffffff" stroke-width="1.3" opacity="0.95" />
 
           <!-- Doubles Long Service Lines -->
-          <line x1="5" y1="14" x2="95" y2="14" stroke="#ffffff" stroke-width="1.1" opacity="0.65" />
-          <line x1="5" y1="156" x2="95" y2="156" stroke="#ffffff" stroke-width="1.1" opacity="0.65" />
+          <line x1="5" y1="14" x2="95" y2="14" stroke="#ffffff" stroke-width="1.0" opacity="0.6" stroke-dasharray="2 1" />
+          <line x1="5" y1="156" x2="95" y2="156" stroke="#ffffff" stroke-width="1.0" opacity="0.6" stroke-dasharray="2 1" />
 
           <!-- Short Service Lines -->
           <line x1="5" y1="67" x2="95" y2="67" stroke="#ffffff" stroke-width="1.4" />
           <line x1="5" y1="103" x2="95" y2="103" stroke="#ffffff" stroke-width="1.4" />
 
-          <!-- Center Net Line -->
-          <line x1="2" y1="85" x2="98" y2="85" stroke="#ffe082" stroke-width="3.2" stroke-dasharray="3 1" />
+          <!-- Center Net -->
+          <line x1="2" y1="85" x2="98" y2="85" stroke="#ffe082" stroke-width="3" stroke-dasharray="3 1" />
 
-          <!-- Center Dividing Lines -->
+          <!-- Center Line (Opponent side) -->
           <line x1="50" y1="5" x2="50" y2="67" stroke="#ffffff" stroke-width="1.2" />
+
+          <!-- Center Line (Player side) -->
           <line x1="50" y1="103" x2="50" y2="165" stroke="#ffffff" stroke-width="1.2" />
 
-          <!-- Visual incoming shot flight path -->
-          <line id="flightPath" class="incoming-path" x1="0" y1="0" x2="0" y2="0" />
+          <!-- Dynamic Trajectory Line SVG overlay -->
+          <line id="svgIncomingPath" x1="0" y1="0" x2="0" y2="0" stroke="#ffeb3b" stroke-width="1.8" stroke-dasharray="2 1.5" opacity="0.8" />
 
-          <!-- Net Posts -->
+          <!-- Net post markers -->
           <circle cx="4" cy="85" r="2.5" fill="#ffd54f" />
           <circle cx="96" cy="85" r="2.5" fill="#ffd54f" />
         </svg>
 
-        <!-- Dynamic Game Elements -->
-        <!-- Opponent Reach Radius Zone -->
-        <div id="opponentReachZone" class="reach-zone" title="Opponent Reach Area"></div>
+        <!-- Opponent Reach Zone (Visual Proximity) -->
+        <div id="opponentReachZone" class="opponent-reach-zone" title="Opponent Reach Area"></div>
 
         <!-- Opponent Avatar (Red Triangle) -->
-        <div id="opponentAvatar" class="opponent-triangle" title="Opponent">
-          <div class="opponent-shape">
-            <span>OPP</span>
-          </div>
-        </div>
+        <div id="opponentAvatar" class="entity-opponent" title="Opponent"></div>
 
         <!-- Player Avatar (Blue Circle) -->
-        <div id="playerAvatar" class="player-avatar" title="You">YOU</div>
+        <div id="playerAvatar" class="entity-player" title="You">YOU</div>
 
-        <!-- Shuttlecock Draggable Token (Accurate SVG Shuttlecock) -->
-        <div id="shuttleToken" class="shuttlecock-token" title="Drag the shuttlecock to return the shot!">
-          <svg class="shuttle-svg" viewBox="0 0 64 64">
-            <!-- Shuttlecock Skirt (Feathers) -->
-            <path d="M19 14 L45 14 L39 42 L25 42 Z" fill="#ffffff" stroke="#37474f" stroke-width="2.5" stroke-linejoin="round" />
-            <!-- Vane lines -->
-            <line x1="25" y1="14" x2="28" y2="42" stroke="#90a4ae" stroke-width="1.5" />
-            <line x1="32" y1="14" x2="32" y2="42" stroke="#90a4ae" stroke-width="1.5" />
-            <line x1="39" y1="14" x2="36" y2="42" stroke="#90a4ae" stroke-width="1.5" />
-            <!-- Feather rib thread bindings -->
-            <path d="M21 23 Q32 25 43 23" fill="none" stroke="#546e7a" stroke-width="1.6" />
-            <path d="M23 33 Q32 35 41 33" fill="none" stroke="#546e7a" stroke-width="1.6" />
-            <!-- Collar band -->
-            <rect x="25" y="42" width="14" height="4" fill="#d32f2f" stroke="#b71c1c" stroke-width="1" rx="1" />
-            <!-- Cork Base -->
-            <path d="M25 46 C25 56 39 56 39 46 Z" fill="#fff9c4" stroke="#fbc02d" stroke-width="2" />
+        <!-- Draggable Shuttlecock Token -->
+        <div id="shuttleToken" class="shuttlecock-token" title="Drag me to hit!">
+          <svg class="shuttle-svg" viewBox="0 0 100 100">
+            <!-- White Feathers -->
+            <polygon points="30,72 50,18 70,72" fill="#f8fafc" stroke="#94a3b8" stroke-width="3" />
+            <line x1="36" y1="52" x2="64" y2="52" stroke="#cbd5e1" stroke-width="2.5" />
+            <line x1="42" y1="36" x2="58" y2="36" stroke="#cbd5e1" stroke-width="2.5" />
+            <line x1="50" y1="18" x2="50" y2="72" stroke="#94a3b8" stroke-width="2" />
+            <!-- Collar Band -->
+            <rect x="36" y="68" width="28" height="6" fill="#e53935" rx="2" />
+            <!-- Rounded Cork Base -->
+            <path d="M 37,74 Q 50,92 63,74 Z" fill="#ffffff" stroke="#cbd5e1" stroke-width="2.5" />
           </svg>
+        </div>
+
+        <!-- Court Corner Quick Info Badge -->
+        <div class="court-info-corner" id="btnCourtInfo">
+          <span>ℹ️</span> Boundaries Guide
         </div>
       </div>
     </div>
@@ -491,326 +722,529 @@
     <div class="info-panel">
       <!-- Scenario Info -->
       <div class="scenario-card">
+        <span class="incoming-badge" id="incomingBadge">🏸 Incoming: Lob to Backhand Corner</span>
         <div class="scenario-title">
-          <span id="scenarioNumber">Scenario 1 of 15</span>
+          <span id="scenarioNumber">Scenario 1 of 21</span>
+          <span id="scenarioScoreStatus">⭐ 1 Point Available</span>
         </div>
-        <div class="incoming-badge" id="incomingBadge">🏸 Incoming: Deep backhand lob</div>
         <p class="scenario-desc" id="scenarioPrompt">Loading scenario...</p>
       </div>
 
       <!-- Icon Legend -->
       <div class="legend-box">
-        <div class="legend-title">Court Legend</div>
+        <div class="legend-title">
+          <span>Court Legend</span>
+          <a href="#" id="linkLearnRules" style="font-size:0.75rem; color:#1976d2; text-decoration:none;">Rules Guide ↗</a>
+        </div>
         <div class="legend-grid">
           <div class="legend-item">
-            <span class="legend-circle"></span>
-            <span><strong>You</strong> (Striker)</span>
+            <div class="legend-badge" style="background:#1976d2; font-weight:bold; font-size:9px;">YOU</div>
+            <span><strong>You</strong> (Player)</span>
           </div>
           <div class="legend-item">
-            <span class="legend-triangle"></span>
-            <span><strong>Opponent</strong> (Triangle)</span>
+            <div class="legend-triangle"></div>
+            <span><strong>Opponent</strong></span>
           </div>
           <div class="legend-item">
-            <div class="legend-shuttle">
-              <svg width="15" height="15" viewBox="0 0 64 64">
-                <path d="M19 14 L45 14 L39 42 L25 42 Z" fill="#ffffff" stroke="#333" stroke-width="3" />
-                <path d="M25 46 C25 56 39 56 39 46 Z" fill="#fff9c4" stroke="#fbc02d" stroke-width="3" />
+            <div class="legend-circle-dash"></div>
+            <span><strong>Opponent Reach</strong></span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-badge" style="background:#ffffff; border:1px solid #fbc02d;">
+              <svg viewBox="0 0 100 100" style="width:16px; height:16px;">
+                <polygon points="30,72 50,18 70,72" fill="#ffffff" stroke="#666" stroke-width="4" />
+                <path d="M 37,74 Q 50,92 63,74 Z" fill="#eee" />
               </svg>
             </div>
             <span><strong>Shuttlecock</strong> (Drag)</span>
-          </div>
-          <div class="legend-item">
-            <div style="width:24px; height:24px; border-radius:50%; border:2px dashed #e53935; background:rgba(229,57,53,0.2);"></div>
-            <span><strong>Reach Zone</strong></span>
           </div>
         </div>
       </div>
 
       <!-- Feedback Card -->
       <div class="feedback-card" id="feedbackBox">
-        <div class="feedback-status" id="feedbackStatus">Return the shot!</div>
+        <div class="feedback-status" id="feedbackStatus">Ready to strike!</div>
         <p class="feedback-msg" id="feedbackDetail">
-          Your opponent just hit the shuttlecock to your side. Drag it across the net into open court away from their red reach circle!
+          Drag the shuttlecock over the net into your opponent's court. Aim for the open space outside their reach circle!
         </p>
       </div>
 
       <!-- Control Buttons -->
       <div class="button-group">
-        <button type="button" class="btn-reset" id="btnPrev">⬅️ Back</button>
-        <button type="button" class="btn-reset" id="btnTryAgain">🔄 Reset Shot</button>
-        <button type="button" class="btn-nav" id="btnNext">Next ➡️</button>
+        <button type="button" class="btn-prev" id="btnPrev">⬅️ Back</button>
+        <button type="button" class="btn-reset" id="btnResetShot">🔄 Reset Shot</button>
+        <button type="button" class="btn-next" id="btnNext">Next ➡️</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Boundaries & Rules Modal -->
+  <div class="modal-overlay" id="rulesModal">
+    <div class="modal-content">
+      <button class="modal-close" id="btnCloseModal">&times;</button>
+      <h2 class="modal-title">🏸 Badminton Singles & Rules Guide</h2>
+
+      <div class="guide-section">
+        <h3>1. Singles vs Doubles Boundaries</h3>
+        <p>In Badminton, the court lines change depending on whether you are playing singles (1 vs 1) or doubles (2 vs 2):</p>
+        <div class="court-diagram-grid">
+          <div class="court-card-info">
+            <strong>Singles: "Long and Narrow"</strong>
+            • <strong>Sidelines:</strong> Inside line is the boundary (tramlines are OUT).<br>
+            • <strong>Rear Line:</strong> Furthest back boundary line is always IN (both serve and rally).
+          </div>
+          <div class="court-card-info doubles">
+            <strong>Doubles: "Wide & Short (Serve)"</strong>
+            • <strong>Sidelines:</strong> Full court width (tramlines are IN).<br>
+            • <strong>Service:</strong> Back boundary is the inner long service line. Rally uses full back line.
+          </div>
+        </div>
+      </div>
+
+      <div class="guide-section">
+        <h3>2. Basic Badminton Rules (Primary 4 PE)</h3>
+        <p>• <strong>Rally Point Scoring:</strong> Every rally won earns a point. First player to 21 points wins the set.</p>
+        <p>• <strong>Serving:</strong> The shuttle must be hit below waist level and diagonally across the net past the opponent's short service line.</p>
+        <p>• <strong>Even/Odd Service Rule:</strong> When your score is even (0, 2, 4...), serve from the right service court. When odd (1, 3, 5...), serve from the left court.</p>
+        <p>• <strong>Common Faults:</strong> Hitting the shuttle into the net, shuttle landing out of boundary lines, touching the net with your racket or body, or hitting the shuttle twice before it crosses the net.</p>
+      </div>
+
+      <div class="guide-section">
+        <h3>3. Singles Strategy Tips</h3>
+        <p>🏸 <strong>Make them run:</strong> Place the shuttle diagonally opposite from where the opponent is standing (Four Corners strategy).</p>
+        <p>🎯 <strong>Avoid the reach zone:</strong> If you hit right back to the opponent, they can smash or kill the shuttlecock without running.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Teacher Review & Student Game History Modal -->
+  <div class="modal-overlay" id="reportModal">
+    <div class="modal-content">
+      <button class="modal-close" id="btnCloseReport">&times;</button>
+      <h2 class="modal-title">📊 Game History & Score (Teacher Review)</h2>
+      <p style="margin: 0 0 10px 0; font-size:0.9rem; color:#546e7a;">
+        Review your decision history below. You can copy this summary to paste into Singapore Student Learning Space (SLS).
+      </p>
+
+      <div style="background:#e8f5e9; padding:12px; border-radius:8px; display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <div style="font-size:1.15rem; font-weight:bold; color:#1b5e20;" id="reportTotalScore">Total Score: 0 / 21</div>
+          <div style="font-size:0.85rem; color:#388e3c;" id="reportAccuracy">Completion: 0 of 21 Scenarios Finished</div>
+        </div>
+        <div style="font-size:1.8rem;" id="reportGradeEmoji">🏸</div>
+      </div>
+
+      <div style="overflow-x:auto;">
+        <table class="report-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Scenario Situation</th>
+              <th>Tactical Focus</th>
+              <th>Status</th>
+              <th>Attempts</th>
+            </tr>
+          </thead>
+          <tbody id="reportTableBody">
+            <!-- Dynamically populated -->
+          </tbody>
+        </table>
+      </div>
+
+      <button type="button" class="btn-copy-report" id="btnCopyReport">📋 Copy Summary for SLS Submission</button>
+      <div id="copyToast" style="text-align:center; font-size:0.85rem; color:#2e7d32; margin-top:6px; display:none;">
+        ✅ Summary copied to clipboard! Ready to paste into SLS.
       </div>
     </div>
   </div>
 
   <script>
     /* ========================================================
-       15 BADMINTON TACTICAL SCENARIOS FOR PRIMARY 4
-       Coordinates:
-       - X: 0 to 100% (Left to Right; singles lines are 11% to 89%)
-       - Y: 0 to 100% (0% to 50% Opponent court; 50% Net; 50% to 100% Player court)
-       - reachRadius: Interception zone around opponent (~28%)
-       - shuttleStartPos: Where the opponent sent the shuttlecock on the player's side!
-       - playerPos: Where the player moves to strike the incoming shuttlecock
+       PE BADMINTON DECISION GAME - 21 TACTICAL SCENARIOS
+       Court Coordinates (%):
+       X: 0 = Left Tramline, 11 = Singles Left Line, 89 = Singles Right Line, 100 = Right Tramline
+       Y: 0 = Opponent Baseline, 50 = Net, 100 = Player Baseline
        ======================================================== */
-    const REACH_RADIUS = 28; // Increased proximity distance
+    const REACH_RADIUS = 28; // Tactical interception proximity
 
     const SCENARIOS = [
       {
         id: 1,
-        title: "Scenario 1: Net Rush Counter",
-        incoming: "🏸 Incoming: High lob pushed deep to your left corner",
-        prompt: "Your opponent rushed forward to the net on their left, lifting the shuttle deep to your backhand corner. Where should you return the shuttle?",
-        opponentPos: { x: 28, y: 34 },
-        shuttleStartPos: { x: 22, y: 90 }, // Deep left baseline
-        playerPos: { x: 26, y: 88 },
-        evaluator: (x, y) => checkPlacement(x, y, 28, 34, {
-          targetDesc: "Deep to their rear right court",
-          isGood: (tx, ty) => ty <= 22 && tx >= 45,
-          idealMsg: "🌟 Fantastic clear! Because your opponent rushed forward, hitting deep to their rear right gives them zero time to turn and backpedal!"
+        title: "Scenario 1: Net Rush",
+        incomingShot: "High lob pushed deep to your left corner",
+        prompt: "Your opponent rushed forward to the net on the left. Where should you place the shuttlecock?",
+        opponentPos: { x: 28, y: 36 },
+        shuttleStart: { x: 20, y: 88 },
+        playerPos: { x: 26, y: 92 },
+        tacticalFocus: "Deep Clear to Far Backcourt",
+        evaluator: (x, y) => checkPlacement(x, y, 28, 36, {
+          targetDesc: "deep backcourt (especially right side)",
+          isIdeal: (tx, ty) => ty <= 24 && tx >= 42,
+          successMsg: "🌟 Fantastic decision! You cleared the shuttle deep to the backcourt. The opponent was caught at the net and cannot sprint back in time!"
         })
       },
       {
         id: 2,
-        title: "Scenario 2: Drop Shot to Your Front Net",
-        incoming: "🏸 Incoming: Low drop shot into your front-left net",
-        prompt: "Your opponent is stuck deep in their rear right corner and tapped a drop shot right to your front-left net. Where is the biggest open space?",
-        opponentPos: { x: 80, y: 14 },
-        shuttleStartPos: { x: 24, y: 56 }, // Player front-left net
-        playerPos: { x: 28, y: 58 },
-        evaluator: (x, y) => checkPlacement(x, y, 80, 14, {
-          targetDesc: "Cross-court drop to front-left net or deep left baseline",
-          isGood: (tx, ty) => (ty >= 30 && ty <= 48 && tx <= 45) || (ty <= 25 && tx <= 38),
-          idealMsg: "🌟 Brilliant placement! Your opponent is trapped in the back-right; you forced them to sprint diagonally across the entire court!"
+        title: "Scenario 2: Deep in the Corner",
+        incomingShot: "Flat drive punched deep to your right baseline",
+        prompt: "Your opponent is pushed far back into their rear right corner. Where is the biggest open space?",
+        opponentPos: { x: 78, y: 14 },
+        shuttleStart: { x: 76, y: 86 },
+        playerPos: { x: 70, y: 90 },
+        tacticalFocus: "Front Net Drop Shot (Opposite Corner)",
+        evaluator: (x, y) => checkPlacement(x, y, 78, 14, {
+          targetDesc: "front net on the left side",
+          isIdeal: (tx, ty) => ty >= 28 && ty <= 48 && tx <= 45,
+          successMsg: "🌟 Excellent drop shot! You made your opponent run diagonally across the entire court from the deep corner to the front net."
         })
       },
       {
         id: 3,
-        title: "Scenario 3: Flat Drive to Your Right Sideline",
-        incoming: "🏸 Incoming: Fast flat drive down your right sideline",
-        prompt: "Your opponent is committed on the mid-left side and hit a flat drive towards your right boundary. Where should you direct your reply?",
+        title: "Scenario 3: Pulled to the Left",
+        incomingShot: "Cross-court drop shot near your left mid-court",
+        prompt: "Your opponent is positioned on the left side of the court. Where can you place the shuttlecock into open space?",
         opponentPos: { x: 22, y: 28 },
-        shuttleStartPos: { x: 78, y: 72 }, // Mid right
-        playerPos: { x: 74, y: 74 },
+        shuttleStart: { x: 25, y: 68 },
+        playerPos: { x: 30, y: 74 },
+        tacticalFocus: "Cross-Court Drive to Wide Right",
         evaluator: (x, y) => checkPlacement(x, y, 22, 28, {
-          targetDesc: "Wide to the open right half across the court",
-          isGood: (tx, ty) => tx >= 58,
-          idealMsg: "🌟 Superb cross-court return! The entire right half was unguarded while your opponent was leaning left."
+          targetDesc: "wide right open court",
+          isIdeal: (tx, ty) => tx >= 60,
+          successMsg: "🌟 Brilliant cross-court shot! The entire right side was completely unprotected, catching your opponent off balance!"
         })
       },
       {
         id: 4,
-        title: "Scenario 4: High Clear to Your Baseline",
-        incoming: "🏸 Incoming: Deep high clear to your back baseline",
-        prompt: "Your opponent cleared high to your deep baseline and stayed standing far at the rear baseline. Where should you place the shuttle?",
+        title: "Scenario 4: Trapped Deep at the Baseline",
+        incomingShot: "High clear soaring over your head to center back",
+        prompt: "Your opponent is waiting far back at their rear baseline. Which shot will make them run the most?",
         opponentPos: { x: 50, y: 12 },
-        shuttleStartPos: { x: 50, y: 92 }, // Deep baseline center
-        playerPos: { x: 50, y: 89 },
+        shuttleStart: { x: 50, y: 88 },
+        playerPos: { x: 50, y: 92 },
+        tacticalFocus: "Tight Net Drop Shot",
         evaluator: (x, y) => checkPlacement(x, y, 50, 12, {
-          targetDesc: "Soft drop shot near the front net",
-          isGood: (tx, ty) => ty >= 32 && ty <= 48,
-          idealMsg: "🌟 Excellent drop shot! Since they are pinned to the rear wall, making them run forward to the net forces maximum sprint distance."
+          targetDesc: "short front net area",
+          isIdeal: (tx, ty) => ty >= 30 && ty <= 48,
+          successMsg: "🌟 Great drop shot! Landing the shuttle tight at the net forces them to sprint all the way from the baseline."
         })
       },
       {
         id: 5,
-        title: "Scenario 5: Tap to Your Mid-Court",
-        incoming: "🏸 Incoming: Quick push to your mid-court",
-        prompt: "Your opponent is hovering right in front of the net in the middle after pushing to your mid-court. How should you counter?",
+        title: "Scenario 5: Center Front Trap",
+        incomingShot: "Tumbling net shot dropping right over the tape",
+        prompt: "Your opponent is hovering right in front of the center net. Where can you safely send the shuttlecock?",
         opponentPos: { x: 50, y: 38 },
-        shuttleStartPos: { x: 50, y: 66 }, // Mid-front court
-        playerPos: { x: 50, y: 70 },
+        shuttleStart: { x: 48, y: 56 },
+        playerPos: { x: 48, y: 64 },
+        tacticalFocus: "High Overhead Clear to Deep Corners",
         evaluator: (x, y) => checkPlacement(x, y, 50, 38, {
-          targetDesc: "High clear into the rear deep corners",
-          isGood: (tx, ty) => ty <= 18 && (tx <= 32 || tx >= 68),
-          idealMsg: "🌟 Perfect high clear! You lifted the shuttlecock over their head right into the deep corners, taking out the net camper!"
+          targetDesc: "deep rear baseline corners",
+          isIdeal: (tx, ty) => ty <= 20 && (tx <= 34 || tx >= 66),
+          successMsg: "🌟 Masterclass clear shot! You lifted it high over their head into the deep corner, completely bypassing their net block!"
         })
       },
       {
         id: 6,
-        title: "Scenario 6: Cross-Court Lob to Deep Forehand",
-        incoming: "🏸 Incoming: High diagonal lob to your deep right corner",
-        prompt: "Your opponent was forced to their rear-left corner and hit a high lob to your deep right baseline. Where is their court exposed?",
+        title: "Scenario 6: Backhand Deep Corner Squeeze",
+        incomingShot: "High attacking clear to your forehand corner",
+        prompt: "Your opponent is trapped in their rear left corner (backhand). Where is the fastest way to win the rally?",
         opponentPos: { x: 20, y: 14 },
-        shuttleStartPos: { x: 80, y: 90 }, // Deep right baseline
-        playerPos: { x: 78, y: 88 },
+        shuttleStart: { x: 80, y: 82 },
+        playerPos: { x: 75, y: 88 },
+        tacticalFocus: "Cross-Court Net Drop to Front Right",
         evaluator: (x, y) => checkPlacement(x, y, 20, 14, {
-          targetDesc: "Front-right net area or mid-right sideline",
-          isGood: (tx, ty) => (ty >= 32 && ty <= 48 && tx >= 55) || (tx >= 68 && ty <= 35),
-          idealMsg: "🌟 Outstanding shot! Moving the shuttle straight down the open right side exploits the huge gap left by their deep-left stance."
+          targetDesc: "front right net area",
+          isIdeal: (tx, ty) => ty >= 28 && ty <= 48 && tx >= 55,
+          successMsg: "🌟 Outstanding shot! Moving the shuttle diagonally to the front right makes it impossible for them to recover from their deep left corner."
         })
       },
       {
         id: 7,
-        title: "Scenario 7: Hairpin Net Spin to Front Right",
-        incoming: "🏸 Incoming: Tumbling short net shot on your right",
-        prompt: "Your opponent is poised at the front-right net and played a tight net spin. Where can you redirect the shuttlecock safely?",
-        opponentPos: { x: 76, y: 36 },
-        shuttleStartPos: { x: 74, y: 56 }, // Front right near net
-        playerPos: { x: 72, y: 58 },
-        evaluator: (x, y) => checkPlacement(x, y, 76, 36, {
-          targetDesc: "High lift to the deep back-left corner",
-          isGood: (tx, ty) => ty <= 22 && tx <= 42,
-          idealMsg: "🌟 Terrific cross-court lift! You safely cleared it far away from their net guard right into the vacant back-left court."
+        title: "Scenario 7: Fast Flat Drive to the Right",
+        incomingShot: "Fast drive shot aimed straight down the line",
+        prompt: "Your opponent played a flat drive and is standing on the right mid-court. Where should you redirect the shuttle?",
+        opponentPos: { x: 75, y: 30 },
+        shuttleStart: { x: 78, y: 72 },
+        playerPos: { x: 72, y: 76 },
+        tacticalFocus: "Cross-Court Push to Empty Left Side",
+        evaluator: (x, y) => checkPlacement(x, y, 75, 30, {
+          targetDesc: "empty left half of the court",
+          isIdeal: (tx, ty) => tx <= 42,
+          successMsg: "🌟 Smart directional change! You took advantage of the empty left court while the opponent was anchored on the right."
         })
       },
       {
         id: 8,
-        title: "Scenario 8: High Lift to Deep Left",
-        incoming: "🏸 Incoming: High defensive clear to your left rear court",
-        prompt: "Your opponent is recovering slowly from their deep right corner. The shuttle flies to your left rear court. Where should you attack?",
-        opponentPos: { x: 82, y: 18 },
-        shuttleStartPos: { x: 22, y: 88 }, // Deep left
-        playerPos: { x: 25, y: 86 },
-        evaluator: (x, y) => checkPlacement(x, y, 82, 18, {
-          targetDesc: "Straight drop to the front-left net corner",
-          isGood: (tx, ty) => ty >= 30 && ty <= 48 && tx <= 42,
-          idealMsg: "🌟 Smart drop shot! The opponent is off-balance on the far right side, leaving the entire left corridor wide open."
+        title: "Scenario 8: Short Net Tap on the Right",
+        incomingShot: "Gentle drop shot right in front of your net",
+        prompt: "Your opponent played a tight net shot and stayed right at the front-right net tape. Where should you hit?",
+        opponentPos: { x: 72, y: 38 },
+        shuttleStart: { x: 68, y: 55 },
+        playerPos: { x: 65, y: 62 },
+        tacticalFocus: "High Lift to Rear Left Baseline",
+        evaluator: (x, y) => checkPlacement(x, y, 72, 38, {
+          targetDesc: "deep rear-left court corner",
+          isIdeal: (tx, ty) => ty <= 22 && tx <= 45,
+          successMsg: "🌟 Perfect high lift! You took the shuttle early at the net and lobbed it deep into the open diagonal back corner."
         })
       },
       {
         id: 9,
-        title: "Scenario 9: Drive Down the Left Line",
-        incoming: "🏸 Incoming: Fast flat drive to your left hip",
-        prompt: "Your opponent shifted heavily to their right mid-court, driving the shuttle towards your left side. Where is the gap?",
-        opponentPos: { x: 78, y: 32 },
-        shuttleStartPos: { x: 26, y: 72 }, // Mid left
-        playerPos: { x: 28, y: 74 },
-        evaluator: (x, y) => checkPlacement(x, y, 78, 32, {
-          targetDesc: "Left side alley away from opponent reach",
-          isGood: (tx, ty) => tx <= 40,
-          idealMsg: "🌟 Great tactical awareness! You recognized their over-commitment to the right and punished them down the left sideline."
+        title: "Scenario 9: Stranded on the Left Sideline",
+        incomingShot: "Angled smash attempt retrieved near your sideline",
+        prompt: "Your opponent was drawn all the way over to the left singles sideline. Where is the open space?",
+        opponentPos: { x: 16, y: 25 },
+        shuttleStart: { x: 22, y: 78 },
+        playerPos: { x: 28, y: 82 },
+        tacticalFocus: "Cross-Court Clear / Drive to Right",
+        evaluator: (x, y) => checkPlacement(x, y, 16, 25, {
+          targetDesc: "right side of the opponent court",
+          isIdeal: (tx, ty) => tx >= 58,
+          successMsg: "🌟 Spot on! You sent the shuttlecock across the court to the wide open right corridor!"
         })
       },
       {
         id: 10,
-        title: "Scenario 10: Lift from Center Front",
-        incoming: "🏸 Incoming: High flick to your mid-court right",
-        prompt: "Your opponent was drawn forward to center front and flicked a lift into your mid-court right. Where should you smash or drive?",
-        opponentPos: { x: 50, y: 35 },
-        shuttleStartPos: { x: 72, y: 74 }, // Mid right
-        playerPos: { x: 68, y: 76 },
-        evaluator: (x, y) => checkPlacement(x, y, 50, 35, {
-          targetDesc: "Deep corner baselines (left or right)",
-          isGood: (tx, ty) => ty <= 18 && (tx <= 34 || tx >= 66),
-          idealMsg: "🌟 Top notch decision! With the opponent caught in no-man's-land near the front center, hitting deep into either rear corner wins the rally!"
+        title: "Scenario 10: Pushed to the Rear Center",
+        incomingShot: "Deep defensive flick landing near your baseline",
+        prompt: "Your opponent is backpedaling near the center baseline. What shot will create the most difficulty?",
+        opponentPos: { x: 50, y: 16 },
+        shuttleStart: { x: 50, y: 84 },
+        playerPos: { x: 48, y: 89 },
+        tacticalFocus: "Corner Net Hairpin Drop",
+        evaluator: (x, y) => checkPlacement(x, y, 50, 16, {
+          targetDesc: "front corners near the net",
+          isIdeal: (tx, ty) => ty >= 30 && ty <= 48 && (tx <= 35 || tx >= 65),
+          successMsg: "🌟 Fantastic corner drop! Forcing a baseline player to sprint forward into the corner is a classic winning tactic!"
         })
       },
       {
         id: 11,
-        title: "Scenario 11: Weak Clear to Center Front",
-        incoming: "🏸 Incoming: Short, weak clear landing near your " + "T" + " line",
-        prompt: "Your opponent is backing up slowly from the front-left. They hit a weak half-court shot to your front-center. Where should you place it?",
-        opponentPos: { x: 26, y: 30 },
-        shuttleStartPos: { x: 50, y: 62 }, // Front-center T-line
-        playerPos: { x: 50, y: 66 },
-        evaluator: (x, y) => checkPlacement(x, y, 26, 30, {
-          targetDesc: "Rear-right corner or sharp front-right angle",
-          isGood: (tx, ty) => tx >= 60,
-          idealMsg: "🌟 Excellent choice! You attacked the open space on the right side while the opponent was tangled up on the left."
+        title: "Scenario 11: Tight Net Face-Off",
+        incomingShot: "Short tumbling net shot right over the cord",
+        prompt: "Your opponent is guarding the front net on the left. Where can you clear the shuttlecock?",
+        opponentPos: { x: 32, y: 40 },
+        shuttleStart: { x: 30, y: 54 },
+        playerPos: { x: 32, y: 62 },
+        tacticalFocus: "High Punch Clear to Rear Right",
+        evaluator: (x, y) => checkPlacement(x, y, 32, 40, {
+          targetDesc: "deep rear right court",
+          isIdeal: (tx, ty) => ty <= 22 && tx >= 55,
+          successMsg: "🌟 Excellent punch clear! You lifted it high over their right shoulder to the deep baseline corner!"
         })
       },
       {
         id: 12,
-        title: "Scenario 12: Baseline Clear from Deep Left Corner",
-        incoming: "🏸 Incoming: High baseline clear straight down your court",
-        prompt: "Your opponent is cornered in their deep-left corner. They managed a high clear down the center. What is your best attacking play?",
-        opponentPos: { x: 18, y: 14 },
-        shuttleStartPos: { x: 50, y: 92 }, // Center baseline
-        playerPos: { x: 50, y: 88 },
-        evaluator: (x, y) => checkPlacement(x, y, 18, 14, {
-          targetDesc: "Front-right net drop shot",
-          isGood: (tx, ty) => ty >= 32 && ty <= 48 && tx >= 55,
-          idealMsg: "🌟 Textbook tactical play! You forced them to travel the longest possible diagonal line on the court (from back-left to front-right)!"
+        title: "Scenario 12: Corner Squeeze at Baseline Right",
+        incomingShot: "High lob to your forehand backcourt",
+        prompt: "Your opponent is stuck back in their rear right court. Where should you place the return?",
+        opponentPos: { x: 76, y: 18 },
+        shuttleStart: { x: 74, y: 84 },
+        playerPos: { x: 70, y: 90 },
+        tacticalFocus: "Reverse Diagonal Drop to Front Left",
+        evaluator: (x, y) => checkPlacement(x, y, 76, 18, {
+          targetDesc: "front left net area",
+          isIdeal: (tx, ty) => ty >= 28 && ty <= 48 && tx <= 40,
+          successMsg: "🌟 Superb reverse drop! You exploited the diagonal distance from their back right corner to your front left net."
         })
       },
       {
         id: 13,
-        title: "Scenario 13: Forehand Cross-Court Push",
-        incoming: "🏸 Incoming: Cross-court push into your deep left corner",
-        prompt: "Your opponent is anticipating a return along their forehand side (mid-right). The shuttle reaches your deep left corner. Where to?",
-        opponentPos: { x: 78, y: 28 },
-        shuttleStartPos: { x: 22, y: 88 }, // Deep left
-        playerPos: { x: 26, y: 86 },
-        evaluator: (x, y) => checkPlacement(x, y, 78, 28, {
-          targetDesc: "Front-left net or straight back-left clear",
-          isGood: (tx, ty) => tx <= 42,
-          idealMsg: "🌟 Sensational shot! You read their anticipation and hit straight down the unprotected left corridor!"
+        title: "Scenario 13: Opponent Leaning to the Right",
+        incomingShot: "Drive hit toward your center body",
+        prompt: "Your opponent has shifted their body weight toward their right side. Where is the gap?",
+        opponentPos: { x: 70, y: 28 },
+        shuttleStart: { x: 50, y: 74 },
+        playerPos: { x: 50, y: 80 },
+        tacticalFocus: "Drive / Push to Open Left Court",
+        evaluator: (x, y) => checkPlacement(x, y, 70, 28, {
+          targetDesc: "open left side",
+          isIdeal: (tx, ty) => tx <= 40,
+          successMsg: "🌟 Great court vision! You targeted the vacant left side before they could shift their center of gravity."
         })
       },
       {
         id: 14,
-        title: "Scenario 14: Net Kill Attempt Falling Short",
-        incoming: "🏸 Incoming: Fast brush to your front-right net corner",
-        prompt: "Your opponent stepped too close to the net and brushed the shuttle to your front-right. Where should you clear the shuttlecock?",
-        opponentPos: { x: 50, y: 36 },
-        shuttleStartPos: { x: 76, y: 56 }, // Front right net
-        playerPos: { x: 74, y: 58 },
-        evaluator: (x, y) => checkPlacement(x, y, 50, 36, {
-          targetDesc: "High attacking clear to the deep backcourt",
-          isGood: (tx, ty) => ty <= 20,
-          idealMsg: "🌟 Perfect lift! You took advantage of their tight net position by clearing the shuttle deep over their head."
+        title: "Scenario 14: Deep Clear Follow-Up",
+        incomingShot: "High clear floating deep into your court",
+        prompt: "You drove your opponent deep to their left baseline. Where is their biggest court weakness now?",
+        opponentPos: { x: 24, y: 15 },
+        shuttleStart: { x: 30, y: 85 },
+        playerPos: { x: 35, y: 90 },
+        tacticalFocus: "Front Net Drop to Right Corner",
+        evaluator: (x, y) => checkPlacement(x, y, 24, 15, {
+          targetDesc: "front right net zone",
+          isIdeal: (tx, ty) => ty >= 28 && ty <= 48 && tx >= 55,
+          successMsg: "🌟 Outstanding shot! You played the 2-corner combination: deep backhand followed by front forehand drop!"
         })
       },
       {
         id: 15,
-        title: "Scenario 15: Championship Point! High Scramble Lift",
-        incoming: "🏸 Incoming: Desperate high scramble lift to your mid-court",
-        prompt: "Your opponent dived to save a shot at their front-right and popped up a high loose lift into your mid-court. How do you finish the rally?",
-        opponentPos: { x: 75, y: 38 },
-        shuttleStartPos: { x: 50, y: 72 }, // Mid court center
-        playerPos: { x: 50, y: 75 },
-        evaluator: (x, y) => checkPlacement(x, y, 75, 38, {
-          targetDesc: "Deep back-left corner or sharp front-left angle",
-          isGood: (tx, ty) => tx <= 42,
-          idealMsg: "🏆 Champion finish! You smashed or placed it into the completely open left court, sealing the match point!"
+        title: "Scenario 15: Sneaking Toward the Net",
+        incomingShot: "Weak short clear landing mid-court",
+        prompt: "Your opponent anticipated a drop and crept right up to the front center. Where will punish their anticipation?",
+        opponentPos: { x: 50, y: 36 },
+        shuttleStart: { x: 50, y: 70 },
+        playerPos: { x: 50, y: 76 },
+        tacticalFocus: "Overhead Clear to Deep Baseline Corners",
+        evaluator: (x, y) => checkPlacement(x, y, 50, 36, {
+          targetDesc: "deep rear corners",
+          isIdeal: (tx, ty) => ty <= 20 && (tx <= 34 || tx >= 66),
+          successMsg: "🌟 Awesome clear! When an opponent cheats forward to the net, a high deep clear behind them wins the point!"
+        })
+      },
+      {
+        id: 16,
+        title: "Scenario 16: Front Net Left Corner Battle",
+        incomingShot: "Spinning net tumble on your front left",
+        prompt: "Your opponent is right at the front left corner near the net. Where is the longest run for them?",
+        opponentPos: { x: 25, y: 40 },
+        shuttleStart: { x: 26, y: 55 },
+        playerPos: { x: 28, y: 62 },
+        tacticalFocus: "Diagonal Lift to Far Rear Right",
+        evaluator: (x, y) => checkPlacement(x, y, 25, 40, {
+          targetDesc: "deep rear right corner",
+          isIdeal: (tx, ty) => ty <= 22 && tx >= 60,
+          successMsg: "🌟 Tremendous diagonal lift! You sent it to the furthest possible coordinate on the badminton court!"
+        })
+      },
+      {
+        id: 17,
+        title: "Scenario 17: Pushed to the Rear Left Tramline",
+        incomingShot: "High backhand clear pushing you deep",
+        prompt: "Your opponent is recovering slowly from their rear left corner. Where can you tap the shuttle?",
+        opponentPos: { x: 22, y: 16 },
+        shuttleStart: { x: 25, y: 88 },
+        playerPos: { x: 28, y: 92 },
+        tacticalFocus: "Sharp Cross Net Drop to Right",
+        evaluator: (x, y) => checkPlacement(x, y, 22, 16, {
+          targetDesc: "front right net zone",
+          isIdeal: (tx, ty) => ty >= 30 && ty <= 48 && tx >= 55,
+          successMsg: "🌟 Beautiful soft touch! The shuttle dropped gently over the net into the front right corner away from their backpedal."
+        })
+      },
+      {
+        id: 18,
+        title: "Scenario 18: Off-Balance on Right Sideline",
+        incomingShot: "Fast drive placed along your right sideline",
+        prompt: "Your opponent lunged to their right sideline and is off-balance. Where should you place your shot?",
+        opponentPos: { x: 82, y: 32 },
+        shuttleStart: { x: 82, y: 74 },
+        playerPos: { x: 76, y: 78 },
+        tacticalFocus: "Direct Cross-Court Push to Left",
+        evaluator: (x, y) => checkPlacement(x, y, 82, 32, {
+          targetDesc: "open left half of the court",
+          isIdeal: (tx, ty) => tx <= 42,
+          successMsg: "🌟 Crisp cross-court placement! You punished their off-balance recovery by hitting into the open court."
+        })
+      },
+      {
+        id: 19,
+        title: "Scenario 19: Long Serve to Backhand Baseline",
+        incomingShot: "Deep high singles serve to your rear backhand",
+        prompt: "Your opponent served deep and retreated to their rear left court. Where is the gap in their defense?",
+        opponentPos: { x: 30, y: 16 },
+        shuttleStart: { x: 28, y: 86 },
+        playerPos: { x: 32, y: 90 },
+        tacticalFocus: "Front Net Drop to Right",
+        evaluator: (x, y) => checkPlacement(x, y, 30, 16, {
+          targetDesc: "front right net area",
+          isIdeal: (tx, ty) => ty >= 28 && ty <= 48 && tx >= 55,
+          successMsg: "🌟 Smart return of serve! An attacking drop to the vacant front right corner immediately seizes the initiative!"
+        })
+      },
+      {
+        id: 20,
+        title: "Scenario 20: No-Man's Land Gaps",
+        incomingShot: "Half-court push drifting toward your mid-court",
+        prompt: "Your opponent is caught in mid-court without good footing. Where are the two safest scoring areas?",
+        opponentPos: { x: 50, y: 30 },
+        shuttleStart: { x: 50, y: 76 },
+        playerPos: { x: 50, y: 82 },
+        tacticalFocus: "Deep Baseline Corners or Tight Net Drops",
+        evaluator: (x, y) => checkPlacement(x, y, 50, 30, {
+          targetDesc: "either deep rear corners or front net corners",
+          isIdeal: (tx, ty) => (ty <= 18 && (tx <= 32 || tx >= 68)) || (ty >= 38 && ty <= 48 && (tx <= 32 || tx >= 68)),
+          successMsg: "🌟 Brilliant tactical play! You targeted the extreme corners, keeping the shuttlecock far away from the opponent's mid-court stance!"
+        })
+      },
+      {
+        id: 21,
+        title: "Scenario 21: Championship Match Point!",
+        incomingShot: "Smash block retrieved diving forward to front net",
+        prompt: "Final rally! Your opponent lunged to the front right net and is out of breath. Where will win the championship?",
+        opponentPos: { x: 74, y: 40 },
+        shuttleStart: { x: 68, y: 54 },
+        playerPos: { x: 62, y: 62 },
+        tacticalFocus: "Winning High Clear to Deep Rear Left Corner",
+        evaluator: (x, y) => checkPlacement(x, y, 74, 40, {
+          targetDesc: "deep rear left baseline corner",
+          isIdeal: (tx, ty) => ty <= 22 && tx <= 42,
+          successMsg: "🏆 MATCH POINT WON! Outstanding high clear all the way to the deep rear left corner! You are a Badminton Tactics Master!"
         })
       }
     ];
 
-    // Core Placement Evaluator with Reach Radius check
-    function checkPlacement(x, y, oppX, oppY, rules) {
-      // 1. Boundary & Net checks
+    /* ========================================================
+       TACTICAL EVALUATION ENGINE (No raw percentage feedback!)
+       ======================================================== */
+    function checkPlacement(x, y, oppX, oppY, config) {
+      // 1. Boundary & Net validations
       if (y > 49) {
         return {
           result: 'improve',
-          msg: "⚠️ Oops! The shuttle didn't cross the net into your opponent's half. Remember to hit across the yellow net line!"
+          msg: "⚠️ The shuttlecock didn't clear the net into the opponent's court! Aim across the yellow net line."
         };
       }
       if (x < 11 || x > 89 || y < 5) {
         return {
           result: 'improve',
-          msg: "⚠️ Out of bounds! The shuttlecock landed outside the singles lines. Aim inside the white boundary lines."
+          msg: "⚠️ Out of bounds! In singles, the inner sideline is the boundary. Keep the shuttle inside the white court lines."
         };
       }
 
-      // 2. Proximity & Opponent Reach Zone check
-      const distToOpponent = Math.hypot(x - oppX, y - oppY);
-      if (distToOpponent < REACH_RADIUS) {
+      // 2. Opponent Reach Proximity Check
+      const dist = Math.hypot(x - oppX, y - oppY);
+      if (dist < REACH_RADIUS) {
         return {
           result: 'improve',
-          msg: `⚠️ Too close to the opponent's reach! The opponent can take 1 quick step or extend their racket to smash this shot. Look for the open green space outside their reach circle!`
+          msg: "⚠️ Too close to the opponent! The opponent is standing right inside this reach circle and can intercept or smash your shot without moving. Aim into open space!"
         };
       }
 
-      // 3. Tactical Space Evaluation
-      if (rules.isGood(x, y)) {
+      // 3. Ideal Target Assessment
+      if (config.isIdeal(x, y)) {
         return {
           result: 'good',
-          msg: rules.idealMsg
+          msg: config.successMsg
         };
       } else {
         return {
           result: 'good',
-          msg: `🏸 Good shot! You kept the shuttlecock away from your opponent's reach zone (${Math.round(distToOpponent)}% distance away), forcing them to run!`
+          msg: `Good shot! You placed the shuttlecock away from your opponent's reach circle, forcing them to run.`
         };
       }
     }
 
-    // State Variables
+    /* ========================================================
+       STATE MANAGEMENT & SCORE ACCUMULATION
+       ======================================================== */
     let currentScenarioIndex = 0;
     let isDragging = false;
     let courtRect = null;
+
+    // Student performance history for SLS Teacher Review
+    const studentHistory = SCENARIOS.map((sc, i) => ({
+      scenarioId: sc.id,
+      title: sc.title,
+      tacticalFocus: sc.tacticalFocus,
+      attempts: 0,
+      solvedOnFirstTry: false,
+      completed: false,
+      status: 'unattempted' // 'correct', 'retry-passed', 'unattempted'
+    }));
+
+    let totalScore = 0;
 
     // Elements
     const courtWrapper = document.getElementById('courtWrapper');
@@ -818,18 +1252,41 @@
     const opponentReachZone = document.getElementById('opponentReachZone');
     const playerAvatar = document.getElementById('playerAvatar');
     const shuttleToken = document.getElementById('shuttleToken');
-    const flightPath = document.getElementById('flightPath');
+    const svgIncomingPath = document.getElementById('svgIncomingPath');
+
+    const topProgressBadge = document.getElementById('topProgressBadge');
+    const topScoreBadge = document.getElementById('topScoreBadge');
     const scenarioNumberEl = document.getElementById('scenarioNumber');
-    const incomingBadgeEl = document.getElementById('incomingBadge');
+    const scenarioScoreStatus = document.getElementById('scenarioScoreStatus');
+    const incomingBadge = document.getElementById('incomingBadge');
     const scenarioPromptEl = document.getElementById('scenarioPrompt');
+
     const feedbackBox = document.getElementById('feedbackBox');
     const feedbackStatus = document.getElementById('feedbackStatus');
     const feedbackDetail = document.getElementById('feedbackDetail');
-    const btnTryAgain = document.getElementById('btnTryAgain');
+
     const btnPrev = document.getElementById('btnPrev');
     const btnNext = document.getElementById('btnNext');
+    const btnResetShot = document.getElementById('btnResetShot');
+    const btnOpenReport = document.getElementById('btnOpenReport');
 
-    // Web Audio Synthesizer (Zero external dependencies)
+    // Modals
+    const rulesModal = document.getElementById('rulesModal');
+    const reportModal = document.getElementById('reportModal');
+    const btnCourtInfo = document.getElementById('btnCourtInfo');
+    const linkLearnRules = document.getElementById('linkLearnRules');
+    const btnCloseModal = document.getElementById('btnCloseModal');
+    const btnCloseReport = document.getElementById('btnCloseReport');
+    const btnCopyReport = document.getElementById('btnCopyReport');
+    const copyToast = document.getElementById('copyToast');
+
+    // Report elements
+    const reportTotalScore = document.getElementById('reportTotalScore');
+    const reportAccuracy = document.getElementById('reportAccuracy');
+    const reportTableBody = document.getElementById('reportTableBody');
+    const reportGradeEmoji = document.getElementById('reportGradeEmoji');
+
+    // Web Audio Synthesizer
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     function playBeep(isSuccess) {
       if (!audioCtx) return;
@@ -842,68 +1299,90 @@
       gain.connect(audioCtx.destination);
 
       if (isSuccess) {
-        osc.frequency.setValueAtTime(520, now);
-        osc.frequency.exponentialRampToValueAtTime(880, now + 0.16);
+        osc.frequency.setValueAtTime(523, now);
+        osc.frequency.exponentialRampToValueAtTime(1046, now + 0.18);
         gain.gain.setValueAtTime(0.2, now);
-        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.22);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
         osc.start(now);
-        osc.stop(now + 0.22);
+        osc.stop(now + 0.25);
       } else {
-        osc.frequency.setValueAtTime(260, now);
-        osc.frequency.setValueAtTime(180, now + 0.14);
+        osc.frequency.setValueAtTime(280, now);
+        osc.frequency.setValueAtTime(180, now + 0.15);
         gain.gain.setValueAtTime(0.25, now);
-        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.28);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
         osc.start(now);
-        osc.stop(now + 0.28);
+        osc.stop(now + 0.3);
       }
     }
 
     // Load Scenario
     function loadScenario(index) {
+      currentScenarioIndex = index;
       const sc = SCENARIOS[index];
+      const record = studentHistory[index];
+
+      // Top badges & titles
+      topProgressBadge.textContent = `Scenario ${index + 1} / ${SCENARIOS.length}`;
       scenarioNumberEl.textContent = `Scenario ${index + 1} of ${SCENARIOS.length}`;
-      incomingBadgeEl.textContent = sc.incoming;
+      incomingBadge.textContent = `🏸 Incoming: ${sc.incomingShot}`;
       scenarioPromptEl.textContent = sc.prompt;
 
-      // Position Opponent (Triangle)
+      if (record.completed) {
+        scenarioScoreStatus.textContent = record.solvedOnFirstTry ? "✅ 1 Point Earned" : "🔄 Completed";
+      } else {
+        scenarioScoreStatus.textContent = "⭐ 1 Point Available";
+      }
+
+      // Position Opponent & Proximity Reach Zone
       opponentAvatar.style.left = `${sc.opponentPos.x}%`;
       opponentAvatar.style.top = `${sc.opponentPos.y}%`;
 
-      // Position & Size Reach Zone
-      // REACH_RADIUS is 28% of court coordinate space
       opponentReachZone.style.left = `${sc.opponentPos.x}%`;
       opponentReachZone.style.top = `${sc.opponentPos.y}%`;
-      opponentReachZone.style.width = `${REACH_RADIUS * 2}%`;
-      opponentReachZone.style.height = `${(REACH_RADIUS * 2) * (1 / 1.7)}%`; // maintain relative circular proportion
 
       // Position Player Avatar
       playerAvatar.style.left = `${sc.playerPos.x}%`;
       playerAvatar.style.top = `${sc.playerPos.y}%`;
 
-      // Position Shuttlecock where the opponent sent it!
+      // Incoming Flight Path SVG
+      svgIncomingPath.setAttribute('x1', sc.opponentPos.x);
+      svgIncomingPath.setAttribute('y1', sc.opponentPos.y);
+      svgIncomingPath.setAttribute('x2', sc.shuttleStart.x);
+      svgIncomingPath.setAttribute('y2', sc.shuttleStart.y);
+
+      // Reset Shuttle Token position
       resetShuttlePosition();
 
-      // Draw flight path line from opponent to shuttle start
-      flightPath.setAttribute('x1', sc.opponentPos.x);
-      flightPath.setAttribute('y1', sc.opponentPos.y);
-      flightPath.setAttribute('x2', sc.shuttleStartPos.x);
-      flightPath.setAttribute('y2', sc.shuttleStartPos.y);
-
-      // Reset Feedback Box
+      // Reset Feedback
       feedbackBox.className = 'feedback-card';
-      feedbackStatus.textContent = 'Your Turn to Return!';
-      feedbackDetail.textContent = 'Notice where the incoming shuttlecock arrived. Drag it across the net into open court away from the red reach circle!';
+      feedbackStatus.textContent = 'Your Turn to Strike!';
+      feedbackDetail.textContent = 'Drag the shuttlecock over the net into your opponent\'s court. Aim for the open space outside their red reach circle!';
+
+      updateGlobalStats();
     }
 
     function resetShuttlePosition() {
       const sc = SCENARIOS[currentScenarioIndex];
       shuttleToken.classList.remove('landed');
-      // Set shuttlecock at the incoming shot position
-      shuttleToken.style.left = `${sc.shuttleStartPos.x}%`;
-      shuttleToken.style.top = `${sc.shuttleStartPos.y}%`;
+      shuttleToken.style.left = `calc(${sc.shuttleStart.x}% - 22px)`;
+      shuttleToken.style.top = `calc(${sc.shuttleStart.y}% - 22px)`;
     }
 
-    // Drag and Drop Logic (Touch + Pointer Events)
+    function updateGlobalStats() {
+      // Calculate accumulated score
+      totalScore = studentHistory.filter(h => h.solvedOnFirstTry).length;
+      topScoreBadge.textContent = `Score: ${totalScore} / ${SCENARIOS.length}`;
+
+      // Save to window for SLS or parent iframe consumption
+      window.badmintonGameResult = {
+        totalScore: totalScore,
+        maxScore: SCENARIOS.length,
+        completedCount: studentHistory.filter(h => h.completed).length,
+        history: studentHistory
+      };
+    }
+
+    // Pointer Drag and Drop Handling
     function onPointerDown(e) {
       e.preventDefault();
       isDragging = true;
@@ -916,18 +1395,15 @@
       if (!isDragging) return;
       courtRect = courtWrapper.getBoundingClientRect();
 
-      let clientX = e.clientX;
-      let clientY = e.clientY;
+      let xPercent = ((e.clientX - courtRect.left) / courtRect.width) * 100;
+      let yPercent = ((e.clientY - courtRect.top) / courtRect.height) * 100;
 
-      let xPercent = ((clientX - courtRect.left) / courtRect.width) * 100;
-      let yPercent = ((clientY - courtRect.top) / courtRect.height) * 100;
-
-      // Clamp within court wrapper
+      // Clamp within visual bounds
       xPercent = Math.max(3, Math.min(97, xPercent));
       yPercent = Math.max(3, Math.min(97, yPercent));
 
-      shuttleToken.style.left = `${xPercent}%`;
-      shuttleToken.style.top = `${yPercent}%`;
+      shuttleToken.style.left = `calc(${xPercent}% - 22px)`;
+      shuttleToken.style.top = `calc(${yPercent}% - 22px)`;
     }
 
     function onPointerUp(e) {
@@ -937,55 +1413,152 @@
       window.removeEventListener('pointerup', onPointerUp);
 
       courtRect = courtWrapper.getBoundingClientRect();
-      let clientX = e.clientX;
-      let clientY = e.clientY;
-
-      let xPercent = ((clientX - courtRect.left) / courtRect.width) * 100;
-      let yPercent = ((clientY - courtRect.top) / courtRect.height) * 100;
+      let xPercent = ((e.clientX - courtRect.left) / courtRect.width) * 100;
+      let yPercent = ((e.clientY - courtRect.top) / courtRect.height) * 100;
 
       evaluatePlacement(xPercent, yPercent);
     }
 
     function evaluatePlacement(x, y) {
       const sc = SCENARIOS[currentScenarioIndex];
-      const evaluation = sc.evaluator(x, y);
+      const record = studentHistory[currentScenarioIndex];
+      record.attempts += 1;
 
+      const evaluation = sc.evaluator(x, y);
       shuttleToken.classList.add('landed');
 
       if (evaluation.result === 'good') {
         playBeep(true);
         feedbackBox.className = 'feedback-card good';
-        feedbackStatus.textContent = '🏸 Great Tactical Decision!';
+        feedbackStatus.textContent = '🏸 Great Decision!';
         feedbackDetail.textContent = evaluation.msg;
+
+        if (!record.completed) {
+          record.completed = true;
+          if (record.attempts === 1) {
+            record.solvedOnFirstTry = true;
+            record.status = 'correct';
+          } else {
+            record.status = 'retry-passed';
+          }
+        }
       } else {
         playBeep(false);
         feedbackBox.className = 'feedback-card improve';
         feedbackStatus.textContent = '🤔 Needs Improvement';
         feedbackDetail.textContent = evaluation.msg;
       }
+
+      updateGlobalStats();
+
+      if (record.completed) {
+        scenarioScoreStatus.textContent = record.solvedOnFirstTry ? "✅ 1 Point Earned" : "🔄 Completed";
+      }
+    }
+
+    // Populate and open Teacher Review Modal
+    function openReportModal() {
+      const completedCount = studentHistory.filter(h => h.completed).length;
+      reportTotalScore.textContent = `Total Score: ${totalScore} / ${SCENARIOS.length} Points`;
+      reportAccuracy.textContent = `Completed: ${completedCount} of ${SCENARIOS.length} Scenarios`;
+
+      if (totalScore >= 18) {
+        reportGradeEmoji.textContent = '🥇 Tactical Master';
+      } else if (totalScore >= 12) {
+        reportGradeEmoji.textContent = '🥈 Smart Strategist';
+      } else {
+        reportGradeEmoji.textContent = '🏸 Keep Practicing!';
+      }
+
+      reportTableBody.innerHTML = '';
+      studentHistory.forEach((h, idx) => {
+        const row = document.createElement('tr');
+
+        let statusText = '';
+        if (h.status === 'correct') {
+          statusText = '<span class="badge-correct">⭐ Correct (1st Try)</span>';
+        } else if (h.status === 'retry-passed') {
+          statusText = '<span class="badge-retry">🔄 Correct (Retried)</span>';
+        } else {
+          statusText = '<span class="badge-unattempted">⏳ Not Completed</span>';
+        }
+
+        row.innerHTML = `
+          <td><strong>${h.scenarioId}</strong></td>
+          <td>${h.title}</td>
+          <td>${h.tacticalFocus}</td>
+          <td>${statusText}</td>
+          <td>${h.attempts} attempt(s)</td>
+        `;
+        reportTableBody.appendChild(row);
+      });
+
+      reportModal.classList.add('active');
+    }
+
+    // Copy Results for SLS
+    function copyReportToClipboard() {
+      const completedCount = studentHistory.filter(h => h.completed).length;
+      let text = `🏸 BADMINTON SINGLES TACTICAL GAME - SLS RESULT SUMMARY\n`;
+      text += `Total Score: ${totalScore} / ${SCENARIOS.length}\n`;
+      text += `Scenarios Completed: ${completedCount} / ${SCENARIOS.length}\n\n`;
+      text += `DETAILED SCENARIO RECORD:\n`;
+      studentHistory.forEach(h => {
+        const resultLabel = h.status === 'correct' ? 'PASSED (1st try)' : (h.status === 'retry-passed' ? 'PASSED (Retried)' : 'NOT DONE');
+        text += `- Scenario ${h.scenarioId} [${h.tacticalFocus}]: ${resultLabel} (${h.attempts} attempts)\n`;
+      });
+
+      navigator.clipboard.writeText(text).then(() => {
+        copyToast.style.display = 'block';
+        setTimeout(() => {
+          copyToast.style.display = 'none';
+        }, 3000);
+      });
     }
 
     // Event Listeners
     shuttleToken.addEventListener('pointerdown', onPointerDown);
 
-    btnTryAgain.addEventListener('click', () => {
+    btnResetShot.addEventListener('click', () => {
       resetShuttlePosition();
       feedbackBox.className = 'feedback-card';
       feedbackStatus.textContent = 'Try Again!';
-      feedbackDetail.textContent = 'Think where the opponent has left an open space. Drag the shuttlecock again.';
+      feedbackDetail.textContent = 'Think about where the opponent will struggle to reach. Drag the shuttlecock again.';
     });
 
     btnNext.addEventListener('click', () => {
-      currentScenarioIndex = (currentScenarioIndex + 1) % SCENARIOS.length;
-      loadScenario(currentScenarioIndex);
+      if (currentScenarioIndex < SCENARIOS.length - 1) {
+        loadScenario(currentScenarioIndex + 1);
+      } else {
+        // Automatically open the report modal when student reaches the end of scenario 21!
+        openReportModal();
+      }
     });
 
     btnPrev.addEventListener('click', () => {
-      currentScenarioIndex = (currentScenarioIndex - 1 + SCENARIOS.length) % SCENARIOS.length;
-      loadScenario(currentScenarioIndex);
+      if (currentScenarioIndex > 0) {
+        loadScenario(currentScenarioIndex - 1);
+      }
     });
 
-    // Initialize
+    // Modals
+    btnCourtInfo.addEventListener('click', () => rulesModal.classList.add('active'));
+    linkLearnRules.addEventListener('click', (e) => {
+      e.preventDefault();
+      rulesModal.classList.add('active');
+    });
+    btnCloseModal.addEventListener('click', () => rulesModal.classList.remove('active'));
+
+    btnOpenReport.addEventListener('click', openReportModal);
+    btnCloseReport.addEventListener('click', () => reportModal.classList.remove('active'));
+    btnCopyReport.addEventListener('click', copyReportToClipboard);
+
+    window.addEventListener('click', (e) => {
+      if (e.target === rulesModal) rulesModal.classList.remove('active');
+      if (e.target === reportModal) reportModal.classList.remove('active');
+    });
+
+    // Initialize Game
     window.addEventListener('DOMContentLoaded', () => {
       loadScenario(0);
     });
