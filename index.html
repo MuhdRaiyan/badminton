@@ -3,15 +3,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Badminton Singles: Tactical Space Placement Game</title>
+  <title>Badminton Singles: Smart Placement Quest</title>
   <style>
     :root {
       --court-green: #2e7d32;
       --court-inner: #1b5e20;
       --court-line: #ffffff;
       --primary-blue: #1976d2;
-      --opponent-red: #d32f2f;
-      --accent-gold: #fbc02d;
+      --accent-orange: #f57c00;
+      --success-green: #2e7d32;
+      --warn-red: #c62828;
       --bg-color: #f4f7f6;
       --card-bg: #ffffff;
       --text-dark: #263238;
@@ -66,12 +67,13 @@
       align-items: flex-start;
     }
 
-    /* Court Layout */
+    /* Court Section */
     .court-section {
       flex: 1.1;
       display: flex;
       flex-direction: column;
       align-items: center;
+      position: relative;
     }
 
     .court-wrapper {
@@ -83,7 +85,7 @@
       border-radius: 10px;
       overflow: hidden;
       border: 4px solid #144a18;
-      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.16);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
       touch-action: none;
     }
 
@@ -93,48 +95,19 @@
       display: block;
     }
 
-    /* Opponent Reach / Proximity Danger Zone */
+    /* Opponent Reach Zone Indicator */
     .reach-zone {
       position: absolute;
-      width: 130px;
-      height: 130px;
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(229, 57, 53, 0.28) 0%, rgba(229, 57, 53, 0.08) 70%, transparent 100%);
-      border: 1.5px dashed rgba(229, 57, 53, 0.6);
-      transform: translate(-50%, -50%);
+      border: 2px dashed rgba(229, 57, 53, 0.85);
+      background: rgba(229, 57, 53, 0.15);
       pointer-events: none;
-      z-index: 3;
-      transition: all 0.35s ease;
-    }
-
-    /* Opponent Avatar (Triangle Shape) */
-    .opponent-avatar {
-      position: absolute;
-      width: 38px;
-      height: 36px;
       transform: translate(-50%, -50%);
-      pointer-events: none;
-      z-index: 5;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       transition: all 0.35s ease;
-      filter: drop-shadow(0 3px 5px rgba(0,0,0,0.35));
+      z-index: 4;
     }
 
-    .triangle-shape {
-      width: 100%;
-      height: 100%;
-      background: var(--opponent-red);
-      clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
-      border-bottom: 2px solid #b71c1c;
-      display: flex;
-      align-items: flex-end;
-      justify-content: center;
-      padding-bottom: 3px;
-    }
-
-    /* Player Avatar */
+    /* Player Avatar (Circle) */
     .player-avatar {
       position: absolute;
       width: 38px;
@@ -142,26 +115,54 @@
       border-radius: 50%;
       background: #1976d2;
       border: 2px solid #ffffff;
-      transform: translate(-50%, -50%);
-      pointer-events: none;
-      z-index: 5;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.35);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 19px;
-      color: #fff;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      font-size: 13px;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: 0.5px;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
       transition: all 0.35s ease;
+      z-index: 5;
     }
 
-    /* Shuttlecock Token (Draggable) */
+    /* Opponent Avatar (Triangle) */
+    .opponent-avatar {
+      position: absolute;
+      width: 40px;
+      height: 38px;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      transition: all 0.35s ease;
+      z-index: 6;
+      filter: drop-shadow(0 3px 4px rgba(0,0,0,0.35));
+    }
+
+    .opponent-triangle {
+      width: 100%;
+      height: 100%;
+      background: #e53935;
+      clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding-bottom: 3px;
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    /* Draggable Shuttlecock Token */
     .shuttlecock-token {
       position: absolute;
-      width: 44px;
-      height: 44px;
+      width: 48px;
+      height: 48px;
       border-radius: 50%;
       background: #ffffff;
-      border: 3px solid var(--accent-gold);
+      border: 2px solid #fbc02d;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
       display: flex;
       align-items: center;
@@ -170,12 +171,7 @@
       z-index: 20;
       touch-action: none;
       transition: transform 0.1s ease;
-    }
-
-    .shuttlecock-token svg {
-      width: 28px;
-      height: 28px;
-      pointer-events: none;
+      transform-origin: center center;
     }
 
     .shuttlecock-token:active {
@@ -189,15 +185,23 @@
 
     @keyframes pulse {
       0% { transform: scale(1); }
-      100% { transform: scale(1.12); }
+      100% { transform: scale(1.14); }
     }
 
-    /* Info Panel & Details */
+    /* Shuttlecock SVG Artwork */
+    .shuttle-svg {
+      width: 32px;
+      height: 32px;
+      display: block;
+      pointer-events: none;
+    }
+
+    /* Info Panel & Legend */
     .info-panel {
       flex: 1;
       display: flex;
       flex-direction: column;
-      gap: 13px;
+      gap: 12px;
     }
 
     .scenario-card {
@@ -211,19 +215,29 @@
       font-weight: 700;
       font-size: 1.05rem;
       color: #1b5e20;
-      margin-bottom: 4px;
+      margin-bottom: 5px;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
 
+    .scenario-badge {
+      font-size: 0.8rem;
+      font-weight: 600;
+      background: #c8e6c9;
+      color: #1b5e20;
+      padding: 3px 8px;
+      border-radius: 12px;
+    }
+
     .scenario-desc {
-      font-size: 0.93rem;
-      line-height: 1.35;
+      font-size: 0.95rem;
+      line-height: 1.4;
       color: #37474f;
       margin: 0;
     }
 
+    /* Legend Box */
     .legend-box {
       background: #fafafa;
       border: 1px solid #e0e0e0;
@@ -243,8 +257,8 @@
     .legend-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 8px;
-      font-size: 0.86rem;
+      gap: 8px 12px;
+      font-size: 0.88rem;
     }
 
     .legend-item {
@@ -253,40 +267,48 @@
       gap: 8px;
     }
 
-    .legend-badge {
-      width: 26px;
-      height: 26px;
-      border-radius: 50%;
+    .legend-icon-wrap {
+      width: 28px;
+      height: 28px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 13px;
       flex-shrink: 0;
     }
 
     .legend-triangle {
-      width: 0;
-      height: 0;
-      border-left: 11px solid transparent;
-      border-right: 11px solid transparent;
-      border-bottom: 20px solid var(--opponent-red);
-      flex-shrink: 0;
-      margin: 0 2px;
+      width: 22px;
+      height: 20px;
+      background: #e53935;
+      clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
     }
 
-    .legend-reach-indicator {
+    .legend-player-circle {
       width: 24px;
       height: 24px;
       border-radius: 50%;
-      border: 2px dashed rgba(229, 57, 53, 0.8);
-      background: rgba(229, 57, 53, 0.25);
-      flex-shrink: 0;
+      background: #1976d2;
+      border: 1px solid #ffffff;
+      color: #fff;
+      font-size: 10px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .legend-reach-circle {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 2px dashed #e53935;
+      background: rgba(229, 57, 53, 0.2);
     }
 
     /* Feedback Display */
     .feedback-card {
-      min-height: 94px;
-      padding: 12px;
+      min-height: 90px;
+      padding: 12px 14px;
       border-radius: 8px;
       background: #eceff1;
       border-left: 5px solid #90a4ae;
@@ -315,22 +337,22 @@
     }
 
     .feedback-msg {
-      font-size: 0.89rem;
+      font-size: 0.9rem;
       line-height: 1.35;
       margin: 0;
     }
 
-    /* Buttons */
+    /* Action Buttons */
     .button-group {
       display: flex;
-      gap: 10px;
-      margin-top: 2px;
+      gap: 8px;
+      margin-top: 4px;
     }
 
     button {
       flex: 1;
       padding: 10px 12px;
-      font-size: 0.92rem;
+      font-size: 0.9rem;
       font-weight: bold;
       border: none;
       border-radius: 8px;
@@ -342,35 +364,26 @@
       transform: translateY(1px);
     }
 
-    .btn-next {
+    .btn-nav {
       background: #1976d2;
       color: white;
     }
 
-    .btn-next:hover {
+    .btn-nav:hover {
       background: #1565c0;
     }
 
-    .btn-prev {
-      background: #eceff1;
-      color: #37474f;
-      flex: 0.7;
-    }
-
-    .btn-prev:hover {
-      background: #cfd8dc;
-    }
-
     .btn-reset {
-      background: #e0e0e0;
+      background: #cfd8dc;
       color: #37474f;
     }
 
     .btn-reset:hover {
-      background: #d5d5d5;
+      background: #b0bec5;
     }
 
-    @media (max-width: 720px) {
+    /* Responsive */
+    @media (max-width: 740px) {
       .game-container {
         flex-direction: column;
         align-items: center;
@@ -387,35 +400,35 @@
 <body>
 
   <header>
-    <h1>🏸 Badminton Singles: Smart Placement Challenge!</h1>
-    <p class="subtitle">Drag the shuttlecock away from your opponent's red reach zone into the open court!</p>
+    <h1>Badminton Singles: Smart Placement Quest</h1>
+    <p class="subtitle">Drag the shuttlecock to find open space away from the opponent's reach zone!</p>
   </header>
 
   <div class="game-container">
-    <!-- Left Section: Badminton Singles Court -->
+    <!-- Court Canvas Area -->
     <div class="court-section">
       <div class="court-wrapper" id="courtWrapper">
-        <!-- Court SVG Lines (Singles court layout) -->
+        <!-- SVG Court Lines (Singles Proportions) -->
         <svg class="court-svg" viewBox="0 0 100 170" preserveAspectRatio="none">
           <!-- Outer Baseline -->
           <rect x="5" y="5" width="90" height="160" fill="none" stroke="#ffffff" stroke-width="1.8" />
 
           <!-- Singles Side Lines -->
-          <line x1="11" y1="5" x2="11" y2="165" stroke="#ffffff" stroke-width="1.2" opacity="0.95" />
-          <line x1="89" y1="5" x2="89" y2="165" stroke="#ffffff" stroke-width="1.2" opacity="0.95" />
+          <line x1="11" y1="5" x2="11" y2="165" stroke="#ffffff" stroke-width="1.3" opacity="0.9" />
+          <line x1="89" y1="5" x2="89" y2="165" stroke="#ffffff" stroke-width="1.3" opacity="0.9" />
 
-          <!-- Long Service Lines -->
-          <line x1="5" y1="14" x2="95" y2="14" stroke="#ffffff" stroke-width="1.1" opacity="0.75" />
-          <line x1="5" y1="156" x2="95" y2="156" stroke="#ffffff" stroke-width="1.1" opacity="0.75" />
+          <!-- Doubles Long Service Line (Reference) -->
+          <line x1="5" y1="14" x2="95" y2="14" stroke="#ffffff" stroke-width="1.2" opacity="0.6" />
+          <line x1="5" y1="156" x2="95" y2="156" stroke="#ffffff" stroke-width="1.2" opacity="0.6" />
 
           <!-- Short Service Lines -->
           <line x1="5" y1="67" x2="95" y2="67" stroke="#ffffff" stroke-width="1.4" />
           <line x1="5" y1="103" x2="95" y2="103" stroke="#ffffff" stroke-width="1.4" />
 
-          <!-- Center Net (Thick dashed line) -->
-          <line x1="2" y1="85" x2="98" y2="85" stroke="#ffe082" stroke-width="3" stroke-dasharray="3 1" />
+          <!-- Center Net -->
+          <line x1="2" y1="85" x2="98" y2="85" stroke="#ffe082" stroke-width="3.2" stroke-dasharray="3 1" />
 
-          <!-- Center Division Line -->
+          <!-- Center Line (Opponent & Player) -->
           <line x1="50" y1="5" x2="50" y2="67" stroke="#ffffff" stroke-width="1.2" />
           <line x1="50" y1="103" x2="50" y2="165" stroke="#ffffff" stroke-width="1.2" />
 
@@ -424,558 +437,584 @@
           <circle cx="96" cy="85" r="2.5" fill="#ffd54f" />
         </svg>
 
-        <!-- Dynamic Game Elements -->
-        <!-- Opponent Reach Danger Zone (Proximity Indicator) -->
-        <div id="reachZone" class="reach-zone" title="Opponent quick interception zone"></div>
+        <!-- Dynamic Visual Reach Indicator around Opponent -->
+        <div id="opponentReach" class="reach-zone" title="Opponent Quick Interception Zone"></div>
 
-        <!-- Opponent Avatar (Red Triangle) -->
+        <!-- Opponent (Red Triangle) -->
         <div id="opponentAvatar" class="opponent-avatar" title="Opponent">
-          <div class="triangle-shape"></div>
+          <div class="opponent-triangle">OPP</div>
         </div>
 
-        <!-- Player Avatar (Blue Circle) -->
-        <div id="playerAvatar" class="player-avatar" title="You">👤</div>
+        <!-- Player (Blue Circle) -->
+        <div id="playerAvatar" class="player-avatar" title="You">YOU</div>
 
-        <!-- Shuttlecock Token (Custom Shuttlecock Graphic) -->
-        <div id="shuttleToken" class="shuttlecock-token" title="Drag the shuttlecock!">
-          <svg viewBox="0 0 24 24" fill="none" stroke="#263238" stroke-width="1.5">
-            <!-- Shuttlecock Skirt Feathers -->
-            <path d="M7 6 L4 16 L20 16 L17 6 Z" fill="#ffffff" stroke="#37474f" stroke-linejoin="round"/>
-            <line x1="9" y1="6" x2="7" y2="16" stroke="#90a4ae" stroke-width="1"/>
-            <line x1="12" y1="6" x2="12" y2="16" stroke="#90a4ae" stroke-width="1"/>
-            <line x1="15" y1="6" x2="17" y2="16" stroke="#90a4ae" stroke-width="1"/>
-            <line x1="5.5" y1="11" x2="18.5" y2="11" stroke="#b0bec5" stroke-width="1.2"/>
-            <!-- Cork Base -->
-            <path d="M7.5 16 C7.5 19.5 16.5 19.5 16.5 16 Z" fill="#ffb74d" stroke="#e65100" stroke-width="1.3"/>
+        <!-- Draggable Shuttlecock Token with Custom SVG Birdie -->
+        <div id="shuttleToken" class="shuttlecock-token" title="Drag me!">
+          <svg class="shuttle-svg" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+            <!-- Feather skirt / cone -->
+            <path d="M9 10 L31 10 L25 25 L15 25 Z" fill="#ffffff" stroke="#263238" stroke-width="1.4" stroke-linejoin="round" />
+            <!-- Feather shafts / vanes -->
+            <line x1="14" y1="10" x2="16.5" y2="25" stroke="#90a4ae" stroke-width="1.2" />
+            <line x1="20" y1="10" x2="20" y2="25" stroke="#78909c" stroke-width="1.2" />
+            <line x1="26" y1="10" x2="23.5" y2="25" stroke="#90a4ae" stroke-width="1.2" />
+            <!-- Cross stitching threads -->
+            <line x1="10.8" y1="15" x2="29.2" y2="15" stroke="#78909c" stroke-width="1.2" />
+            <line x1="12.8" y1="20" x2="27.2" y2="20" stroke="#78909c" stroke-width="1.2" />
+            <!-- Red binding ribbon -->
+            <rect x="14.5" y="24.5" width="11" height="2" fill="#d32f2f" stroke="#263238" stroke-width="0.8" />
+            <!-- Cork dome -->
+            <path d="M14.5 26.5 C14.5 33, 25.5 33, 25.5 26.5 Z" fill="#f5eedc" stroke="#263238" stroke-width="1.4" />
           </svg>
         </div>
       </div>
     </div>
 
-    <!-- Right Section: Info, Legend & Evaluation -->
+    <!-- Right Side: Details, Legend & Controls -->
     <div class="info-panel">
-      <!-- Scenario Title Card (P4 text removed) -->
+      <!-- Scenario Card -->
       <div class="scenario-card">
         <div class="scenario-title">
           <span id="scenarioNumber">Scenario 1 of 15</span>
+          <span class="scenario-badge" id="tacticalTag">Tactics</span>
         </div>
         <p class="scenario-desc" id="scenarioPrompt">Loading scenario...</p>
       </div>
 
-      <!-- Icon Legend -->
+      <!-- Legend -->
       <div class="legend-box">
         <div class="legend-title">Court Legend</div>
         <div class="legend-grid">
           <div class="legend-item">
-            <div class="legend-badge" style="background:#1976d2; color:#fff;">👤</div>
-            <span><strong>You</strong> (Player)</span>
+            <div class="legend-icon-wrap">
+              <div class="legend-player-circle">YOU</div>
+            </div>
+            <span><strong>You</strong> (Striker)</span>
           </div>
+
           <div class="legend-item">
-            <div class="legend-triangle"></div>
+            <div class="legend-icon-wrap">
+              <div class="legend-triangle"></div>
+            </div>
             <span><strong>Opponent</strong> (Triangle)</span>
           </div>
+
           <div class="legend-item">
-            <div class="legend-badge" style="background:#ffffff; border:2px solid #fbc02d; padding:2px;">
-              <svg viewBox="0 0 24 24" width="16" height="16">
-                <path d="M7 6 L4 16 L20 16 L17 6 Z" fill="#ffffff" stroke="#37474f"/>
-                <path d="M7.5 16 C7.5 19.5 16.5 19.5 16.5 16 Z" fill="#ffb74d" stroke="#e65100"/>
+            <div class="legend-icon-wrap">
+              <svg viewBox="0 0 40 40" width="22" height="22">
+                <path d="M9 10 L31 10 L25 25 L15 25 Z" fill="#ffffff" stroke="#263238" stroke-width="1.4"/>
+                <line x1="14" y1="10" x2="16.5" y2="25" stroke="#90a4ae" stroke-width="1.2"/>
+                <line x1="20" y1="10" x2="20" y2="25" stroke="#78909c" stroke-width="1.2"/>
+                <line x1="26" y1="10" x2="23.5" y2="25" stroke="#90a4ae" stroke-width="1.2"/>
+                <line x1="10.8" y1="15" x2="29.2" y2="15" stroke="#78909c" stroke-width="1.2"/>
+                <rect x="14.5" y="24.5" width="11" height="2" fill="#d32f2f"/>
+                <path d="M14.5 26.5 C14.5 33, 25.5 33, 25.5 26.5 Z" fill="#f5eedc" stroke="#263238" stroke-width="1.4"/>
               </svg>
             </div>
             <span><strong>Shuttlecock</strong> (Drag)</span>
           </div>
+
           <div class="legend-item">
-            <div class="legend-reach-indicator"></div>
-            <span><strong>Opponent Reach</strong> (Danger Zone)</span>
+            <div class="legend-icon-wrap">
+              <div class="legend-reach-circle"></div>
+            </div>
+            <span><strong>Reach Zone</strong> (Danger)</span>
           </div>
         </div>
       </div>
 
-      <!-- Feedback Card -->
+      <!-- Feedback Area -->
       <div class="feedback-card" id="feedbackBox">
-        <div class="feedback-status" id="feedbackStatus">Ready to serve!</div>
+        <div class="feedback-status" id="feedbackStatus">Your Turn to Strike!</div>
         <p class="feedback-msg" id="feedbackDetail">
-          Drag the shuttlecock across the net. Notice the red dashed circle around the opponent—avoid hitting near it because they can quickly intercept the shuttle!
+          Drag the shuttlecock across the net. Aim outside the red dashed reach circle into open space!
         </p>
       </div>
 
-      <!-- Control Buttons -->
+      <!-- Navigation & Action Buttons -->
       <div class="button-group">
-        <button type="button" class="btn-prev" id="btnPrev">⬅️ Back</button>
-        <button type="button" class="btn-reset" id="btnTryAgain">🔄 Try Again</button>
-        <button type="button" class="btn-next" id="btnNext">Next ➡️</button>
+        <button type="button" class="btn-reset" id="btnPrev">⬅️ Back</button>
+        <button type="button" class="btn-reset" id="btnTryAgain">🔄 Reset Shot</button>
+        <button type="button" class="btn-nav" id="btnNext">Next ➡️</button>
       </div>
     </div>
   </div>
 
   <script>
     /* ========================================================
-       15 BADMINTON SCENARIOS (PRIMARY 4 PE DECISION-MAKING)
-       Opponent Proximity Radius: ~30 units (enlarged reach).
-       Singles Court Boundaries:
-       - Singles width: X between 11% and 89%
-       - Opponent half: Y between 5% (baseline) and 49% (net line)
+       15 TACTICAL BADMINTON SCENARIOS
+       Court Coordinates: 0-100% X (Left to Right), 0-100% Y (0 = Opponent Back, 50 = Net, 100 = Player Back)
+       Singles boundaries: X between 11% and 89%, Y between 5% and 49% (Opponent court)
        ======================================================== */
-    const OPPONENT_PROXIMITY_RADIUS = 30; // Increased proximity threshold
+    const REACH_RADIUS = 28; // Increased proximity radius in coordinate units
 
     const SCENARIOS = [
       {
         id: 1,
-        title: "Scenario 1: Net Rush Left",
-        prompt: "Your opponent rushed forward to the front net on their left! Notice their red reach zone. Where should you place the shuttlecock?",
-        opponentPos: { x: 28, y: 36 },
+        title: "Scenario 1: Opponent Rushed Front-Left",
+        tag: "Exploit Depth",
+        prompt: "Your opponent charged forward to the front-left net. Notice their red reach zone. Where can you hit it safely?",
+        opponentPos: { x: 26, y: 36 },
         playerPos: { x: 50, y: 78 },
         evaluator: (x, y) => {
-          if (y > 49) return { result: 'improve', msg: "Oops! You hit the shuttle into your own side or net. Aim across the net!" };
-          if (x < 11 || x > 89 || y < 5) return { result: 'improve', msg: "Out of bounds! Keep the shuttle within the singles sidelines." };
+          if (y > 49) return { result: 'improve', msg: "Oops! You hit the shuttle into your own court or net. Hit across the net!" };
+          if (x < 11 || x > 89 || y < 5) return { result: 'improve', msg: "Out of bounds! Stay inside the white singles sidelines." };
 
-          const dist = Math.hypot(x - 28, y - 36);
-          if (dist <= OPPONENT_PROXIMITY_RADIUS) {
+          const dist = Math.hypot(x - 26, y - 36);
+          if (dist <= REACH_RADIUS) {
             return {
               result: 'improve',
-              msg: "⚠️ The shuttle is inside the opponent's reach zone! With their fast reaction, they will intercept and smash it down."
+              msg: "⚠️ Intercepted! The shuttle landed inside the opponent's reach zone. They can react fast and smash it down!"
             };
           }
-          if (y <= 24 && x >= 40) {
+          if (y <= 24 && x >= 46) {
             return {
               result: 'good',
-              msg: "🌟 Excellent clear! You lobbed it deep to the rear right corner. The opponent is trapped at the net and cannot sprint back in time!"
+              msg: "🌟 Masterclass clear shot! You hit deep to the rear right. The opponent cannot backpedal in time to reach it!"
             };
           }
           return {
             result: 'good',
-            msg: "Good shot! You placed the shuttlecock well outside their red reach zone, forcing them to run."
+            msg: "Good placement! You cleared it outside their reach circle, forcing them to turn around and run."
           };
         }
       },
       {
         id: 2,
-        title: "Scenario 2: Pushed to Rear Right",
-        prompt: "Your opponent is caught deep in their rear right corner. Look at the open space on their court. Where is the best spot?",
+        title: "Scenario 2: Pushed to Deep Rear-Right",
+        tag: "Diagonal Drop",
+        prompt: "Your opponent is stuck deep in the rear right corner. Where is the largest unprotected space?",
         opponentPos: { x: 78, y: 14 },
         playerPos: { x: 50, y: 80 },
         evaluator: (x, y) => {
           if (y > 49) return { result: 'improve', msg: "The shuttle didn't cross the net into the opponent's court." };
-          if (x < 11 || x > 89 || y < 5) return { result: 'improve', msg: "Out! Remember the singles sideline boundaries." };
+          if (x < 11 || x > 89 || y < 5) return { result: 'improve', msg: "Out of bounds! Watch the singles lines." };
 
           const dist = Math.hypot(x - 78, y - 14);
-          if (dist <= OPPONENT_PROXIMITY_RADIUS) {
+          if (dist <= REACH_RADIUS) {
             return {
               result: 'improve',
-              msg: "⚠️ That's too close to the opponent's reach zone! They can take one step and return it easily."
+              msg: "⚠️ Within reach! You hit near their rear corner, giving them an easy shot without making them move."
             };
           }
-          if (y >= 30 && y <= 48 && x <= 45) {
+          if (y >= 32 && y <= 48 && x <= 42) {
             return {
               result: 'good',
-              msg: "🌟 Fantastic drop shot! You placed it right at the front-left net, making them sprint diagonal across the entire court."
+              msg: "🌟 Fantastic diagonal drop shot! Making them sprint all the way from the back right to the front-left net!"
             };
           }
           return {
             result: 'good',
-            msg: "Well played! You hit it far away from their back corner."
+            msg: "Well played! You placed it well away from their reach circle."
           };
         }
       },
       {
         id: 3,
-        title: "Scenario 3: Stranded on the Left",
-        prompt: "Your opponent was pulled over to the left side of the court. Which side is completely unguarded?",
-        opponentPos: { x: 22, y: 28 },
-        playerPos: { x: 45, y: 75 },
+        title: "Scenario 3: Pulled to Left Mid-Court",
+        tag: "Cross-Court Switch",
+        prompt: "The opponent is hovering on the left side of the court. Which half of the court is wide open?",
+        opponentPos: { x: 24, y: 28 },
+        playerPos: { x: 45, y: 76 },
         evaluator: (x, y) => {
-          if (y > 49) return { result: 'improve', msg: "Hit the shuttlecock across the net!" };
-          if (x < 11 || x > 89 || y < 5) return { result: 'improve', msg: "Outside the singles boundaries! Aim inside the lines." };
+          if (y > 49) return { result: 'improve', msg: "Shuttlecock did not clear the net!" };
+          if (x < 11 || x > 89 || y < 5) return { result: 'improve', msg: "Shot went out of the court!" };
 
-          const dist = Math.hypot(x - 22, y - 28);
-          if (dist <= OPPONENT_PROXIMITY_RADIUS) {
+          const dist = Math.hypot(x - 24, y - 28);
+          if (dist <= REACH_RADIUS) {
             return {
               result: 'improve',
-              msg: "⚠️ The shuttle is inside their reach zone. They can quickly intercept it with a backhand drive!"
+              msg: "⚠️ Too close to the opponent! They have quick reflexes and can intercept this easily."
             };
           }
-          if (x >= 58) {
+          if (x >= 60) {
             return {
               result: 'good',
-              msg: "🌟 Brilliant cross-court shot! The entire right court was wide open, leaving them no chance to recover."
+              msg: "🌟 Superb cross-court shot! The entire right corridor was unprotected, leaving them no chance."
             };
           }
           return {
             result: 'improve',
-            msg: "Aim further right! Make sure you exploit the big open space."
+            msg: "⚠️ Try again! You are still hitting towards the left side where the opponent is standing."
           };
         }
       },
       {
         id: 4,
         title: "Scenario 4: Deep Baseline Center",
-        prompt: "Your opponent is waiting way back at the rear baseline. Where will it be hardest for them to run forward?",
+        tag: "Front Net Drop",
+        prompt: "The opponent is camping far at the back baseline. How can you make them run the maximum forward distance?",
         opponentPos: { x: 50, y: 12 },
         playerPos: { x: 50, y: 82 },
         evaluator: (x, y) => {
-          if (y > 49) return { result: 'improve', msg: "Shuttlecock must cross the net into the opponent's area." };
-          if (x < 11 || x > 89 || y < 5) return { result: 'improve', msg: "Out of bounds!" };
+          if (y > 49) return { result: 'improve', msg: "The shuttlecock didn't clear the net!" };
+          if (x < 11 || x > 89 || y < 5) return { result: 'improve', msg: "Out! Keep it within the singles sidelines." };
 
           const dist = Math.hypot(x - 50, y - 12);
-          if (dist <= OPPONENT_PROXIMITY_RADIUS) {
+          if (dist <= REACH_RADIUS) {
             return {
               result: 'improve',
-              msg: "⚠️ They are already waiting at the baseline! Hitting deep lands right in their reach zone for an easy hit."
+              msg: "⚠️ You hit directly towards the back where they are already waiting!"
             };
           }
           if (y >= 32 && y <= 47) {
             return {
               result: 'good',
-              msg: "🌟 Superb drop shot! A soft hit close to the net forces them to sprint all the way from the baseline."
+              msg: "🌟 Brilliant gentle drop shot! Tapping the shuttle just over the net forces them to sprint all the way from the back!"
             };
           }
           return {
             result: 'good',
-            msg: "Good placement into the short court, away from their baseline position."
+            msg: "Good shot! You placed it away from their deep position."
           };
         }
       },
       {
         id: 5,
-        title: "Scenario 5: Front Center Net Hug",
-        prompt: "Your opponent is hovering right against the net in the middle. Where should you clear the shuttlecock?",
+        title: "Scenario 5: Center Front Net Guard",
+        tag: "High Clear",
+        prompt: "The opponent is lurking right at the front net in the center. Where should you lift the shuttlecock?",
         opponentPos: { x: 50, y: 38 },
         playerPos: { x: 50, y: 84 },
         evaluator: (x, y) => {
-          if (y > 49) return { result: 'improve', msg: "Shot stayed on your side of the court!" };
-          if (x < 11 || x > 89 || y < 5) return { result: 'improve', msg: "Out of bounds! Stay within the singles lines." };
+          if (y > 49) return { result: 'improve', msg: "Hit across the net into the opponent's court!" };
+          if (x < 11 || x > 89 || y < 5) return { result: 'improve', msg: "Out! Aim inside the boundaries." };
 
           const dist = Math.hypot(x - 50, y - 38);
-          if (dist <= OPPONENT_PROXIMITY_RADIUS) {
+          if (dist <= REACH_RADIUS) {
             return {
               result: 'improve',
-              msg: "⚠️ Dangerous! When the opponent is at the net, anything inside their reach circle can be smashed down instantly."
+              msg: "⚠️ Danger! You hit right into their reach at the net. They can execute an instant net kill!"
             };
           }
-          if (y <= 18 && (x <= 35 || x >= 65)) {
+          if (y <= 18 && (x <= 34 || x >= 66)) {
             return {
               result: 'good',
-              msg: "🌟 Masterful clear! High and deep to the far corners, flying directly over their head while they are stuck at the net!"
+              msg: "🌟 Excellent high clear! Lifting it over their head to the deep rear corners leaves them stranded at the net!"
             };
           }
           return {
             result: 'good',
-            msg: "Nice deep shot! You forced them to backpedal rapidly."
+            msg: "Good lift! Moving it over the opponent makes them scramble back."
           };
         }
       },
       {
         id: 6,
-        title: "Scenario 6: Net Rush Right",
-        prompt: "Your opponent charged forward to their front right corner. Where is the biggest space behind them?",
-        opponentPos: { x: 74, y: 38 },
-        playerPos: { x: 45, y: 78 },
+        title: "Scenario 6: Deep Rear-Left Corner",
+        tag: "Front-Right Drop",
+        prompt: "Your opponent is cornered in their back-left corner. Where is the furthest open target?",
+        opponentPos: { x: 22, y: 14 },
+        playerPos: { x: 50, y: 80 },
         evaluator: (x, y) => {
-          if (y > 49) return { result: 'improve', msg: "The shuttlecock didn't cross the net." };
-          if (x < 11 || x > 89 || y < 5) return { result: 'improve', msg: "Out of bounds!" };
+          if (y > 49) return { result: 'improve', msg: "Cross the net into the opponent court." };
+          if (x < 11 || x > 89 || y < 5) return { result: 'improve', msg: "Out! Stay inside the singles boundary lines." };
 
-          const dist = Math.hypot(x - 74, y - 38);
-          if (dist <= OPPONENT_PROXIMITY_RADIUS) {
+          const dist = Math.hypot(x - 22, y - 14);
+          if (dist <= REACH_RADIUS) {
             return {
               result: 'improve',
-              msg: "⚠️ Inside their reach zone! Hitting near the front right lets them kill the shuttle immediately."
+              msg: "⚠️ Opponent reach danger! You hit right back into their rear-left zone."
             };
           }
-          if (y <= 24 && x <= 45) {
+          if (y >= 30 && y <= 48 && x >= 58) {
             return {
               result: 'good',
-              msg: "🌟 Perfect diagonal clear! You sent it to their deep rear-left corner, opposite from where they are standing."
+              msg: "🌟 Perfect diagonal drop! You forced them to travel the longest distance on the court across to front-right!"
             };
           }
           return {
             result: 'good',
-            msg: "Good shot! You stayed clear of their reach circle."
+            msg: "Good placement into the vacant half of the court."
           };
         }
       },
       {
         id: 7,
-        title: "Scenario 7: Trapped at Rear Left",
-        prompt: "Your opponent is stuck deep in their rear left corner. How can you make them run the longest distance?",
-        opponentPos: { x: 22, y: 14 },
-        playerPos: { x: 50, y: 80 },
-        evaluator: (x, y) => {
-          if (y > 49) return { result: 'improve', msg: "Keep the shot across the net!" };
-          if (x < 11 || x > 89 || y < 5) return { result: 'improve', msg: "Outside the court lines!" };
-
-          const dist = Math.hypot(x - 22, y - 14);
-          if (dist <= OPPONENT_PROXIMITY_RADIUS) {
-            return {
-              result: 'improve',
-              msg: "⚠️ That lands right in their reach circle! They don't even have to move their feet to return it."
-            };
-          }
-          if (y >= 30 && y <= 48 && x >= 55) {
-            return {
-              result: 'good',
-              msg: "🌟 Excellent cross-court drop shot! Dropping it at the front-right net forces them to run corner-to-corner."
-            };
-          }
-          return {
-            result: 'good',
-            msg: "Well played! You placed it safely away from their rear left corner."
-          };
-        }
-      },
-      {
-        id: 8,
-        title: "Scenario 8: Drifting to the Far Right",
-        prompt: "Your opponent drifted towards the right sideline in mid-court. Which half of the court is empty?",
-        opponentPos: { x: 78, y: 28 },
-        playerPos: { x: 50, y: 75 },
-        evaluator: (x, y) => {
-          if (y > 49) return { result: 'improve', msg: "Aim into the opponent's side of the court!" };
-          if (x < 11 || x > 89 || y < 5) return { result: 'improve', msg: "Out of bounds!" };
-
-          const dist = Math.hypot(x - 78, y - 28);
-          if (dist <= OPPONENT_PROXIMITY_RADIUS) {
-            return {
-              result: 'improve',
-              msg: "⚠️ Watch the red circle! The opponent can reach out and hit a powerful drive right at you."
-            };
-          }
-          if (x <= 42) {
-            return {
-              result: 'good',
-              msg: "🌟 Smart shot down the left line! You hit into the wide open left court, completely wrong-footing the opponent."
-            };
-          }
-          return {
-            result: 'improve',
-            msg: "Aim further to the left to take full advantage of the open space!"
-          };
-        }
-      },
-      {
-        id: 9,
-        title: "Scenario 9: Mid-Court Center (Base Position)",
-        prompt: "Your opponent recovered to the center 'T' base position. Corners are the farthest away! Where should you aim?",
-        opponentPos: { x: 50, y: 28 },
-        playerPos: { x: 50, y: 80 },
-        evaluator: (x, y) => {
-          if (y > 49) return { result: 'improve', msg: "Across the net, please!" };
-          if (x < 11 || x > 89 || y < 5) return { result: 'improve', msg: "Shot landed outside the court lines!" };
-
-          const dist = Math.hypot(x - 50, y - 28);
-          if (dist <= OPPONENT_PROXIMITY_RADIUS) {
-            return {
-              result: 'improve',
-              msg: "⚠️ Directly in their reach zone! Hitting to the center makes it easy for them to attack."
-            };
-          }
-          if ((y <= 16 || y >= 36) && (x <= 28 || x >= 72)) {
-            return {
-              result: 'good',
-              msg: "🌟 Ace decision! Aiming tight into the deep corners or front corners forces them off their center base!"
-            };
-          }
-          return {
-            result: 'good',
-            msg: "Good shot! You stayed outside their central reach zone."
-          };
-        }
-      },
-      {
-        id: 10,
-        title: "Scenario 10: Deep Mid-Court Clearance",
-        prompt: "Your opponent just hit a high lift from deep baseline right. They are scrambling to get back. Where is open?",
-        opponentPos: { x: 68, y: 16 },
-        playerPos: { x: 52, y: 72 },
-        evaluator: (x, y) => {
-          if (y > 49) return { result: 'improve', msg: "The shuttlecock didn't clear the net." };
-          if (x < 11 || x > 89 || y < 5) return { result: 'improve', msg: "Out of bounds!" };
-
-          const dist = Math.hypot(x - 68, y - 16);
-          if (dist <= OPPONENT_PROXIMITY_RADIUS) {
-            return {
-              result: 'improve',
-              msg: "⚠️ Too close to the opponent's reach zone! Don't let them hit without moving."
-            };
-          }
-          if (y >= 30 && x <= 45) {
-            return {
-              result: 'good',
-              msg: "🌟 Brilliant fast drop to the front-left! Since they were moving backward on the right, changing direction is super tough."
-            };
-          }
-          return {
-            result: 'good',
-            msg: "Well played! You moved the shuttle away from their zone."
-          };
-        }
-      },
-      {
-        id: 11,
-        title: "Scenario 11: Tight Net Defense",
-        prompt: "Your opponent is guarding the front net very tightly in the center-left. Where can you lift the shuttlecock safely?",
-        opponentPos: { x: 38, y: 42 },
-        playerPos: { x: 48, y: 82 },
-        evaluator: (x, y) => {
-          if (y > 49) return { result: 'improve', msg: "Over the net, into the opponent's court!" };
-          if (x < 11 || x > 89 || y < 5) return { result: 'improve', msg: "Outside singles court boundary!" };
-
-          const dist = Math.hypot(x - 38, y - 42);
-          if (dist <= OPPONENT_PROXIMITY_RADIUS) {
-            return {
-              result: 'improve',
-              msg: "⚠️ Caught in the reach zone! If you hit short near them, they will tap it right down to the floor."
-            };
-          }
-          if (y <= 20 && x >= 50) {
-            return {
-              result: 'good',
-              msg: "🌟 Superb high clear to the deep right baseline! You pushed them all the way from the net to the back court."
-            };
-          }
-          return {
-            result: 'good',
-            msg: "Good lift! You cleared the shuttle safely beyond their reach."
-          };
-        }
-      },
-      {
-        id: 12,
-        title: "Scenario 12: Baseline Corner Pin",
-        prompt: "Your opponent was pushed back into the rear-left corner and is off-balance. Where should you place a delicate shot?",
-        opponentPos: { x: 20, y: 12 },
-        playerPos: { x: 50, y: 76 },
-        evaluator: (x, y) => {
-          if (y > 49) return { result: 'improve', msg: "Hit the shuttlecock over the net!" };
-          if (x < 11 || x > 89 || y < 5) return { result: 'improve', msg: "Out of bounds!" };
-
-          const dist = Math.hypot(x - 20, y - 12);
-          if (dist <= OPPONENT_PROXIMITY_RADIUS) {
-            return {
-              result: 'improve',
-              msg: "⚠️ Inside their reach zone! They can take one quick step and return it."
-            };
-          }
-          if (y >= 30 && x >= 60) {
-            return {
-              result: 'good',
-              msg: "🌟 Magnificent diagonal drop! Hitting to the front-right net creates the maximum possible running distance."
-            };
-          }
-          return {
-            result: 'good',
-            msg: "Good placement into open court away from the rear corner!"
-          };
-        }
-      },
-      {
-        id: 13,
-        title: "Scenario 13: Over-Committed Forward",
-        prompt: "Your opponent anticipated a drop and dashed forward right to the front-center. Where should you flick the shuttle?",
-        opponentPos: { x: 50, y: 44 },
-        playerPos: { x: 50, y: 80 },
-        evaluator: (x, y) => {
-          if (y > 49) return { result: 'improve', msg: "Over the net into their side!" };
-          if (x < 11 || x > 89 || y < 5) return { result: 'improve', msg: "Outside the sidelines!" };
-
-          const dist = Math.hypot(x - 50, y - 44);
-          if (dist <= OPPONENT_PROXIMITY_RADIUS) {
-            return {
-              result: 'improve',
-              msg: "⚠️ The opponent is right at the tape! Hitting into their reach zone gives them an easy net-kill."
-            };
-          }
-          if (y <= 18) {
-            return {
-              result: 'good',
-              msg: "🌟 Outstanding attacking lob! By flicking it high and deep to the back baseline, they have to scramble backward!"
-            };
-          }
-          return {
-            result: 'good',
-            msg: "Well played! You kept it outside their forward reach zone."
-          };
-        }
-      },
-      {
-        id: 14,
-        title: "Scenario 14: Sideline Shadowing",
-        prompt: "Your opponent is hugging their right sideline in the mid-court. How can you challenge their movement?",
-        opponentPos: { x: 75, y: 32 },
+        title: "Scenario 7: Shifted to Right Mid-Court",
+        tag: "Left Corridor Attack",
+        prompt: "Your opponent was dragged over to the right side. Where is the empty court space?",
+        opponentPos: { x: 76, y: 28 },
         playerPos: { x: 45, y: 78 },
         evaluator: (x, y) => {
-          if (y > 49) return { result: 'improve', msg: "Hit across the net!" };
-          if (x < 11 || x > 89 || y < 5) return { result: 'improve', msg: "Out of bounds!" };
+          if (y > 49) return { result: 'improve', msg: "Keep the shot across the net!" };
+          if (x < 11 || x > 89 || y < 5) return { result: 'improve', msg: "Outside! Watch the singles lines." };
 
-          const dist = Math.hypot(x - 75, y - 32);
-          if (dist <= OPPONENT_PROXIMITY_RADIUS) {
+          const dist = Math.hypot(x - 76, y - 28);
+          if (dist <= REACH_RADIUS) {
             return {
               result: 'improve',
-              msg: "⚠️ The shuttle is inside the opponent's reach circle. Avoid hitting straight at them!"
+              msg: "⚠️ Too close to the opponent's reach! Look at how open the left side is."
             };
           }
           if (x <= 40) {
             return {
               result: 'good',
-              msg: "🌟 Fantastic shot to the left! Switching wings forces the opponent across the entire width of the court."
+              msg: "🌟 Great tactical vision! The entire left half is wide open, making it impossible for them to recover in time."
+            };
+          }
+          return {
+            result: 'improve',
+            msg: "Aim further to the left, away from their defensive reach."
+          };
+        }
+      },
+      {
+        id: 8,
+        title: "Scenario 8: Pinned at Front-Right Net",
+        tag: "Deep Rear-Left Clear",
+        prompt: "Opponent lunged forward to the front-right net. How can you punish this forward positioning?",
+        opponentPos: { x: 74, y: 38 },
+        playerPos: { x: 50, y: 78 },
+        evaluator: (x, y) => {
+          if (y > 49) return { result: 'improve', msg: "Did not cross the net!" };
+          if (x < 11 || x > 89 || y < 5) return { result: 'improve', msg: "Shot went out of bounds!" };
+
+          const dist = Math.hypot(x - 74, y - 38);
+          if (dist <= REACH_RADIUS) {
+            return {
+              result: 'improve',
+              msg: "⚠️ Caught inside the reach zone! They can tap it down easily."
+            };
+          }
+          if (y <= 22 && x <= 42) {
+            return {
+              result: 'good',
+              msg: "🌟 Outstanding clear! You sent it to the deep diagonal back-left corner, bypassing them completely!"
             };
           }
           return {
             result: 'good',
-            msg: "Good shot! You stayed out of their reach circle."
+            msg: "Nice shot into the open court away from the front net!"
+          };
+        }
+      },
+      {
+        id: 9,
+        title: "Scenario 9: Mid-Court Off-Balance Right",
+        tag: "Deep Left Drive",
+        prompt: "Opponent is leaning heavily towards their right mid-court. Where will they struggle to change direction?",
+        opponentPos: { x: 68, y: 25 },
+        playerPos: { x: 50, y: 80 },
+        evaluator: (x, y) => {
+          if (y > 49 || x < 11 || x > 89 || y < 5) return { result: 'improve', msg: "Hit inside the opponent's singles court!" };
+
+          const dist = Math.hypot(x - 68, y - 25);
+          if (dist <= REACH_RADIUS) {
+            return {
+              result: 'improve',
+              msg: "⚠️ Hit inside their reach zone! They can easily swipe the shuttle."
+            };
+          }
+          if (x <= 36) {
+            return {
+              result: 'good',
+              msg: "🌟 Fantastic counter-shot! Hitting opposite to their momentum leaves them frozen!"
+            };
+          }
+          return {
+            result: 'good',
+            msg: "Solid decision away from their reach circle."
+          };
+        }
+      },
+      {
+        id: 10,
+        title: "Scenario 10: Mid-Court Off-Balance Left",
+        tag: "Deep Right Drive",
+        prompt: "Opponent took a heavy step toward the left side. Where is the quick passing lane?",
+        opponentPos: { x: 32, y: 25 },
+        playerPos: { x: 50, y: 80 },
+        evaluator: (x, y) => {
+          if (y > 49 || x < 11 || x > 89 || y < 5) return { result: 'improve', msg: "Keep it in the singles court across the net!" };
+
+          const dist = Math.hypot(x - 32, y - 25);
+          if (dist <= REACH_RADIUS) {
+            return {
+              result: 'improve',
+              msg: "⚠️ Inside the reach circle! Change the direction towards the right side."
+            };
+          }
+          if (x >= 64) {
+            return {
+              result: 'good',
+              msg: "🌟 Wonderful shot! You exploited the vacant right court while they were caught moving left!"
+            };
+          }
+          return {
+            result: 'good',
+            msg: "Good shot placing it away from their body."
+          };
+        }
+      },
+      {
+        id: 11,
+        title: "Scenario 11: Front Center-Right Rush",
+        tag: "Deep Back-Left Lift",
+        prompt: "Your opponent is sprinting forward to the front center-right. Where should you place the shuttle?",
+        opponentPos: { x: 62, y: 38 },
+        playerPos: { x: 50, y: 82 },
+        evaluator: (x, y) => {
+          if (y > 49 || x < 11 || x > 89 || y < 5) return { result: 'improve', msg: "Out of bounds or in your own court!" };
+
+          const dist = Math.hypot(x - 62, y - 38);
+          if (dist <= REACH_RADIUS) {
+            return {
+              result: 'improve',
+              msg: "⚠️ Too close to their reach! Lift high and deep instead."
+            };
+          }
+          if (y <= 20 && x <= 40) {
+            return {
+              result: 'good',
+              msg: "🌟 Precision clear! Sending it deep to the back-left corner punishes their forward charge!"
+            };
+          }
+          return {
+            result: 'good',
+            msg: "Well played into the open back court."
+          };
+        }
+      },
+      {
+        id: 12,
+        title: "Scenario 12: Baseline Hugger",
+        tag: "Net Corner Tap",
+        prompt: "Opponent refuses to leave the deep back line. Where can you make them run fastest forward?",
+        opponentPos: { x: 50, y: 10 },
+        playerPos: { x: 50, y: 84 },
+        evaluator: (x, y) => {
+          if (y > 49 || x < 11 || x > 89 || y < 5) return { result: 'improve', msg: "Keep it in court across the net!" };
+
+          const dist = Math.hypot(x - 50, y - 10);
+          if (dist <= REACH_RADIUS) {
+            return {
+              result: 'improve',
+              msg: "⚠️ They are already standing right there at the back! Drop it short to the front net."
+            };
+          }
+          if (y >= 32 && y <= 47 && (x <= 36 || x >= 64)) {
+            return {
+              result: 'good',
+              msg: "🌟 Beautiful net drop to the corner! They have over 10 meters of sprint to cover!"
+            };
+          }
+          return {
+            result: 'good',
+            msg: "Good shot in front of the opponent."
+          };
+        }
+      },
+      {
+        id: 13,
+        title: "Scenario 13: Tight Front-Left Pin",
+        tag: "Deep Cross-Court Clear",
+        prompt: "Opponent is trapped in the front-left corner after retrieving a net tumble. Where is their weakest spot?",
+        opponentPos: { x: 20, y: 40 },
+        playerPos: { x: 50, y: 82 },
+        evaluator: (x, y) => {
+          if (y > 49 || x < 11 || x > 89 || y < 5) return { result: 'improve', msg: "Keep the shuttlecock inside the lines!" };
+
+          const dist = Math.hypot(x - 20, y - 40);
+          if (dist <= REACH_RADIUS) {
+            return {
+              result: 'improve',
+              msg: "⚠️ The opponent is right there! Clear the shuttle far away."
+            };
+          }
+          if (y <= 22 && x >= 56) {
+            return {
+              result: 'good',
+              msg: "🌟 Brilliant! Longest possible diagonal clear to the deep rear-right corner. Complete winner!"
+            };
+          }
+          return {
+            result: 'good',
+            msg: "Good shot exploiting the opponent's trapped position."
+          };
+        }
+      },
+      {
+        id: 14,
+        title: "Scenario 14: Recovering from Rear Mid-Left",
+        tag: "Front-Right Drop",
+        prompt: "Opponent hit a weak clear from their back-left and is trying to return to center. Strike before they recover!",
+        opponentPos: { x: 30, y: 18 },
+        playerPos: { x: 50, y: 78 },
+        evaluator: (x, y) => {
+          if (y > 49 || x < 11 || x > 89 || y < 5) return { result: 'improve', msg: "Keep it inside the opponent's court!" };
+
+          const dist = Math.hypot(x - 30, y - 18);
+          if (dist <= REACH_RADIUS) {
+            return {
+              result: 'improve',
+              msg: "⚠️ Intercepted! Hit away from the left side before they regain balance."
+            };
+          }
+          if (y >= 30 && y <= 47 && x >= 55) {
+            return {
+              result: 'good',
+              msg: "🌟 Sharp tactical execution! Drop shot into the front-right net catches them completely off guard!"
+            };
+          }
+          return {
+            result: 'good',
+            msg: "Good placement into the open court!"
           };
         }
       },
       {
         id: 15,
-        title: "Scenario 15: Championship Point - Corner Squeeze!",
-        prompt: "Final rally! Your opponent is deep in their back-left court, tired and off-balance. Where do you deliver the winning shot?",
-        opponentPos: { x: 25, y: 15 },
-        playerPos: { x: 55, y: 78 },
+        title: "Scenario 15: Match Point Finale",
+        tag: "Championship Decision",
+        prompt: "Match point! Opponent is leaning heavily toward the right mid-court. Spot the winning open area and win the point!",
+        opponentPos: { x: 74, y: 32 },
+        playerPos: { x: 50, y: 82 },
         evaluator: (x, y) => {
-          if (y > 49) return { result: 'improve', msg: "Must cross the net to win the point!" };
-          if (x < 11 || x > 89 || y < 5) return { result: 'improve', msg: "Out of bounds! Keep it inside the line." };
+          if (y > 49 || x < 11 || x > 89 || y < 5) return { result: 'improve', msg: "Out or didn't cross the net! Stay calm and keep it in bounds!" };
 
-          const dist = Math.hypot(x - 25, y - 15);
-          if (dist <= OPPONENT_PROXIMITY_RADIUS) {
+          const dist = Math.hypot(x - 74, y - 32);
+          if (dist <= REACH_RADIUS) {
             return {
               result: 'improve',
-              msg: "⚠️ Inside their reach zone! They can reach this without moving. Look for the huge open court on the front right!"
+              msg: "⚠️ Dangerous! That is inside their reach radius. Aim for the open left half!"
             };
           }
-          if (y >= 30 && y <= 48 && x >= 55) {
+          if (x <= 40) {
             return {
               result: 'good',
-              msg: "🏆 WINNER! A glorious cross-court drop shot right at the front-right net tape! Point won!"
+              msg: "🏆 CHAMPION! Phenomenal shot to the unprotected left court! You won the rally with smart court placement!"
             };
           }
           return {
-            result: 'good',
-            msg: "Great shot into open space! Point secured!"
+            result: 'improve',
+            msg: "Aim further left away from the opponent's reach to seal the victory!"
           };
         }
       }
     ];
 
-    // State Variables
+    // State
     let currentScenarioIndex = 0;
     let isDragging = false;
     let courtRect = null;
 
-    // Elements
+    // DOM Elements
     const courtWrapper = document.getElementById('courtWrapper');
-    const reachZone = document.getElementById('reachZone');
     const opponentAvatar = document.getElementById('opponentAvatar');
+    const opponentReach = document.getElementById('opponentReach');
     const playerAvatar = document.getElementById('playerAvatar');
     const shuttleToken = document.getElementById('shuttleToken');
     const scenarioNumberEl = document.getElementById('scenarioNumber');
+    const tacticalTagEl = document.getElementById('tacticalTag');
     const scenarioPromptEl = document.getElementById('scenarioPrompt');
     const feedbackBox = document.getElementById('feedbackBox');
     const feedbackStatus = document.getElementById('feedbackStatus');
     const feedbackDetail = document.getElementById('feedbackDetail');
-    const btnPrev = document.getElementById('btnPrev');
     const btnTryAgain = document.getElementById('btnTryAgain');
+    const btnPrev = document.getElementById('btnPrev');
     const btnNext = document.getElementById('btnNext');
 
-    // Web Audio Synthesizer
+    // Audio Feedback (Self-contained Web Audio API synthesizer)
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     function playBeep(isSuccess) {
       if (!audioCtx) return;
@@ -988,19 +1027,19 @@
       gain.connect(audioCtx.destination);
 
       if (isSuccess) {
-        osc.frequency.setValueAtTime(440, now);
-        osc.frequency.exponentialRampToValueAtTime(880, now + 0.18);
-        gain.gain.setValueAtTime(0.2, now);
+        osc.frequency.setValueAtTime(460, now);
+        osc.frequency.exponentialRampToValueAtTime(880, now + 0.16);
+        gain.gain.setValueAtTime(0.22, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.22);
+        osc.start(now);
+        osc.stop(now + 0.22);
+      } else {
+        osc.frequency.setValueAtTime(260, now);
+        osc.frequency.setValueAtTime(180, now + 0.14);
+        gain.gain.setValueAtTime(0.24, now);
         gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
         osc.start(now);
         osc.stop(now + 0.25);
-      } else {
-        osc.frequency.setValueAtTime(260, now);
-        osc.frequency.setValueAtTime(180, now + 0.12);
-        gain.gain.setValueAtTime(0.22, now);
-        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
-        osc.start(now);
-        osc.stop(now + 0.3);
       }
     }
 
@@ -1008,14 +1047,19 @@
     function loadScenario(index) {
       const sc = SCENARIOS[index];
       scenarioNumberEl.textContent = `Scenario ${index + 1} of ${SCENARIOS.length}`;
+      tacticalTagEl.textContent = sc.tag;
       scenarioPromptEl.textContent = sc.prompt;
 
-      // Position Opponent (Red Triangle) & Reach Zone
+      // Position Opponent (Triangle)
       opponentAvatar.style.left = `${sc.opponentPos.x}%`;
       opponentAvatar.style.top = `${sc.opponentPos.y}%`;
 
-      reachZone.style.left = `${sc.opponentPos.x}%`;
-      reachZone.style.top = `${sc.opponentPos.y}%`;
+      // Position Opponent Reach Zone Circle (diameter = REACH_RADIUS * 2 in %)
+      const diameterPercent = REACH_RADIUS * 2;
+      opponentReach.style.width = `${diameterPercent}%`;
+      opponentReach.style.height = `${diameterPercent * (100 / 170)}%`; // maintain circular ratio
+      opponentReach.style.left = `${sc.opponentPos.x}%`;
+      opponentReach.style.top = `${sc.opponentPos.y}%`;
 
       // Position Player
       playerAvatar.style.left = `${sc.playerPos.x}%`;
@@ -1026,18 +1070,18 @@
 
       // Reset Feedback
       feedbackBox.className = 'feedback-card';
-      feedbackStatus.textContent = 'Your Turn to Hit!';
-      feedbackDetail.textContent = 'Drag the shuttlecock to your opponent\'s court. Notice the red dashed circle around the opponent—avoid hitting near it because they can quickly intercept the shuttle!';
+      feedbackStatus.textContent = 'Your Turn to Strike!';
+      feedbackDetail.textContent = 'Drag the shuttlecock to open space outside the opponent\'s red reach circle!';
     }
 
     function resetShuttlePosition() {
       const sc = SCENARIOS[currentScenarioIndex];
       shuttleToken.classList.remove('landed');
-      shuttleToken.style.left = `calc(${sc.playerPos.x}% - 22px)`;
-      shuttleToken.style.top = `calc(${sc.playerPos.y}% - 22px)`;
+      shuttleToken.style.left = `calc(${sc.playerPos.x}% - 24px)`;
+      shuttleToken.style.top = `calc(${sc.playerPos.y}% - 24px)`;
     }
 
-    // Drag-and-Drop Events
+    // Drag-and-drop mechanics (Supports both touch and mouse)
     function onPointerDown(e) {
       e.preventDefault();
       isDragging = true;
@@ -1050,14 +1094,17 @@
       if (!isDragging) return;
       courtRect = courtWrapper.getBoundingClientRect();
 
-      let xPercent = ((e.clientX - courtRect.left) / courtRect.width) * 100;
-      let yPercent = ((e.clientY - courtRect.top) / courtRect.height) * 100;
+      let clientX = e.clientX;
+      let clientY = e.clientY;
 
-      xPercent = Math.max(2, Math.min(98, xPercent));
-      yPercent = Math.max(2, Math.min(98, yPercent));
+      let xPercent = ((clientX - courtRect.left) / courtRect.width) * 100;
+      let yPercent = ((clientY - courtRect.top) / courtRect.height) * 100;
 
-      shuttleToken.style.left = `calc(${xPercent}% - 22px)`;
-      shuttleToken.style.top = `calc(${yPercent}% - 22px)`;
+      xPercent = Math.max(3, Math.min(97, xPercent));
+      yPercent = Math.max(3, Math.min(97, yPercent));
+
+      shuttleToken.style.left = `calc(${xPercent}% - 24px)`;
+      shuttleToken.style.top = `calc(${yPercent}% - 24px)`;
     }
 
     function onPointerUp(e) {
@@ -1067,8 +1114,11 @@
       window.removeEventListener('pointerup', onPointerUp);
 
       courtRect = courtWrapper.getBoundingClientRect();
-      let xPercent = ((e.clientX - courtRect.left) / courtRect.width) * 100;
-      let yPercent = ((e.clientY - courtRect.top) / courtRect.height) * 100;
+      let clientX = e.clientX;
+      let clientY = e.clientY;
+
+      let xPercent = ((clientX - courtRect.left) / courtRect.width) * 100;
+      let yPercent = ((clientY - courtRect.top) / courtRect.height) * 100;
 
       evaluatePlacement(xPercent, yPercent);
     }
@@ -1082,12 +1132,12 @@
       if (evaluation.result === 'good') {
         playBeep(true);
         feedbackBox.className = 'feedback-card good';
-        feedbackStatus.textContent = '🏸 Great Decision!';
+        feedbackStatus.textContent = 'Great Placement!';
         feedbackDetail.textContent = evaluation.msg;
       } else {
         playBeep(false);
         feedbackBox.className = 'feedback-card improve';
-        feedbackStatus.textContent = '🤔 Needs Improvement';
+        feedbackStatus.textContent = 'Needs Improvement';
         feedbackDetail.textContent = evaluation.msg;
       }
     }
@@ -1099,7 +1149,7 @@
       resetShuttlePosition();
       feedbackBox.className = 'feedback-card';
       feedbackStatus.textContent = 'Try Again!';
-      feedbackDetail.textContent = 'Find an open space well outside the opponent\'s red reach circle.';
+      feedbackDetail.textContent = 'Find an open space far away from the opponent\'s reach zone. Drag the shuttlecock again.';
     });
 
     btnNext.addEventListener('click', () => {
@@ -1112,11 +1162,10 @@
       loadScenario(currentScenarioIndex);
     });
 
-    // Initialize Game
+    // Start on first scenario
     window.addEventListener('DOMContentLoaded', () => {
       loadScenario(0);
     });
   </script>
 </body>
 </html>
-```
