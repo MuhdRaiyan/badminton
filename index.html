@@ -17,13 +17,11 @@
       --card-bg: #ffffff;
       --text-dark: #263238;
     }
-
     * {
       box-sizing: border-box;
       user-select: none;
       -webkit-user-select: none;
     }
-
     body {
       margin: 0;
       padding: 14px;
@@ -35,26 +33,22 @@
       align-items: center;
       min-height: 100vh;
     }
-
     header {
       text-align: center;
       max-width: 960px;
       margin-bottom: 12px;
       width: 100%;
     }
-
     h1 {
       margin: 0 0 4px 0;
       font-size: 1.55rem;
       color: #1b5e20;
     }
-
     p.subtitle {
       margin: 0;
       font-size: 0.95rem;
       color: #546e7a;
     }
-
     /* Top Stats Bar */
     .stats-bar {
       display: flex;
@@ -69,7 +63,6 @@
       font-weight: 600;
       box-shadow: 0 2px 6px rgba(0,0,0,0.04);
     }
-
     .score-badge {
       background: #e8f5e9;
       color: #2e7d32;
@@ -77,7 +70,6 @@
       border-radius: 20px;
       border: 1px solid #a5d6a7;
     }
-
     .progress-badge {
       background: #e3f2fd;
       color: #1565c0;
@@ -85,7 +77,6 @@
       border-radius: 20px;
       border: 1px solid #90caf9;
     }
-
     .btn-report-quick {
       background: #607d8b;
       color: #fff;
@@ -97,11 +88,9 @@
       font-weight: 600;
       transition: background 0.2s;
     }
-
     .btn-report-quick:hover {
       background: #455a64;
     }
-
     .game-container {
       display: flex;
       flex-direction: row;
@@ -114,7 +103,6 @@
       box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
       align-items: flex-start;
     }
-
     /* Court Layout */
     .court-section {
       flex: 1.1;
@@ -123,7 +111,6 @@
       align-items: center;
       position: relative;
     }
-
     .court-wrapper {
       position: relative;
       width: 100%;
@@ -136,13 +123,11 @@
       box-shadow: 0 6px 14px rgba(0, 0, 0, 0.18);
       touch-action: none;
     }
-
     svg.court-svg {
       width: 100%;
       height: 100%;
       display: block;
     }
-
     /* Opponent - Red Triangle Avatar */
     .entity-opponent {
       position: absolute;
@@ -159,7 +144,6 @@
       justify-content: center;
       box-shadow: 0 4px 8px rgba(0,0,0,0.3);
     }
-
     .entity-opponent::after {
       content: 'OPP';
       font-size: 8px;
@@ -168,7 +152,6 @@
       margin-bottom: 3px;
       letter-spacing: 0.5px;
     }
-
     /* Opponent Reach Zone */
     .opponent-reach-zone {
       position: absolute;
@@ -182,7 +165,6 @@
       transition: all 0.4s ease;
       z-index: 3;
     }
-
     /* Player Avatar - Round Blue */
     .entity-player {
       position: absolute;
@@ -203,7 +185,6 @@
       font-size: 10px;
       box-shadow: 0 4px 8px rgba(0,0,0,0.3);
     }
-
     /* Draggable Shuttlecock Token */
     .shuttlecock-token {
       position: absolute;
@@ -221,29 +202,23 @@
       touch-action: none;
       transition: transform 0.1s ease;
     }
-
     .shuttlecock-token:active {
       cursor: grabbing;
       transform: scale(1.18);
     }
-
     .shuttlecock-token.landed {
       animation: pulse 1s infinite alternate;
     }
-
     @keyframes pulse {
       0% { transform: scale(1); }
       100% { transform: scale(1.14); }
     }
-
-    /* Refined Shuttlecock Vector Icon SVG */
+    /* Shuttlecock Vector Icon SVG */
     .shuttle-svg {
-      width: 30px;
-      height: 30px;
+      width: 28px;
+      height: 28px;
       pointer-events: none;
-      display: block;
     }
-
     /* Trajectory arrow from opponent to incoming shuttle */
     .incoming-path {
       position: absolute;
@@ -253,7 +228,6 @@
       stroke-dasharray: 4 3;
       z-index: 2;
     }
-
     /* Court Corner Info Button */
     .court-info-corner {
       position: absolute;
@@ -273,11 +247,9 @@
       border: 1px solid rgba(255, 255, 255, 0.3);
       transition: background 0.2s;
     }
-
     .court-info-corner:hover {
       background: rgba(0, 0, 0, 0.85);
     }
-
     /* Right Section: Details, Legend & Feedback */
     .info-panel {
       flex: 1.1;
@@ -285,14 +257,12 @@
       flex-direction: column;
       gap: 12px;
     }
-
     .scenario-card {
       background: #e8f5e9;
       border-left: 5px solid #2e7d32;
       padding: 12px 14px;
       border-radius: 6px;
     }
-
     .incoming-badge {
       display: inline-block;
       font-size: 0.8rem;
@@ -303,7 +273,6 @@
       border-radius: 4px;
       margin-bottom: 6px;
     }
-
     .scenario-title {
       font-weight: 700;
       font-size: 1.05rem;
@@ -313,21 +282,18 @@
       justify-content: space-between;
       align-items: center;
     }
-
     .scenario-desc {
       font-size: 0.93rem;
       line-height: 1.35;
       color: #37474f;
       margin: 0;
     }
-
     .legend-box {
       background: #fafafa;
       border: 1px solid #e0e0e0;
       border-radius: 8px;
       padding: 9px 12px;
     }
-
     .legend-title {
       font-size: 0.8rem;
       text-transform: uppercase;
@@ -339,20 +305,17 @@
       justify-content: space-between;
       align-items: center;
     }
-
     .legend-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 6px;
       font-size: 0.84rem;
     }
-
     .legend-item {
       display: flex;
       align-items: center;
       gap: 8px;
     }
-
     .legend-badge {
       width: 24px;
       height: 24px;
@@ -364,7 +327,6 @@
       color: #fff;
       flex-shrink: 0;
     }
-
     .legend-triangle {
       width: 22px;
       height: 22px;
@@ -372,7 +334,6 @@
       clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
       flex-shrink: 0;
     }
-
     .legend-circle-dash {
       width: 22px;
       height: 22px;
@@ -381,7 +342,6 @@
       background: rgba(229, 57, 53, 0.15);
       flex-shrink: 0;
     }
-
     /* Feedback Display */
     .feedback-card {
       min-height: 90px;
@@ -394,37 +354,31 @@
       justify-content: center;
       transition: all 0.3s ease;
     }
-
     .feedback-card.good {
       background: #e8f8f0;
       border-left-color: #2e7d32;
       color: #1b5e20;
     }
-
     .feedback-card.improve {
       background: #fff3e0;
       border-left-color: #f57c00;
       color: #b75300;
     }
-
     .feedback-status {
       font-weight: 700;
       font-size: 1rem;
       margin-bottom: 3px;
     }
-
     .feedback-msg {
       font-size: 0.9rem;
       line-height: 1.35;
       margin: 0;
     }
-
     /* Action Buttons */
     .button-group {
       display: flex;
       gap: 8px;
     }
-
     button {
       flex: 1;
       padding: 9px 12px;
@@ -435,40 +389,32 @@
       cursor: pointer;
       transition: background 0.2s, transform 0.1s;
     }
-
     button:active {
       transform: translateY(1px);
     }
-
     .btn-prev {
       background: #eceff1;
       color: #455a64;
       flex: 0.8;
     }
-
     .btn-prev:hover {
       background: #cfd8dc;
     }
-
     .btn-next {
       background: #1976d2;
       color: white;
     }
-
     .btn-next:hover {
       background: #1565c0;
     }
-
     .btn-reset {
       background: #cfd8dc;
       color: #37474f;
       flex: 0.9;
     }
-
     .btn-reset:hover {
       background: #b0bec5;
     }
-
     /* Modal dialogs */
     .modal-overlay {
       position: fixed;
@@ -480,11 +426,9 @@
       z-index: 100;
       padding: 16px;
     }
-
     .modal-overlay.active {
       display: flex;
     }
-
     .modal-content {
       background: #ffffff;
       border-radius: 12px;
@@ -496,7 +440,6 @@
       position: relative;
       box-shadow: 0 10px 30px rgba(0,0,0,0.3);
     }
-
     .modal-close {
       position: absolute;
       top: 14px;
@@ -510,7 +453,6 @@
       width: auto;
       padding: 0;
     }
-
     .modal-title {
       color: #1b5e20;
       margin-top: 0;
@@ -520,38 +462,32 @@
       align-items: center;
       gap: 8px;
     }
-
     .guide-section {
       margin-bottom: 16px;
       border-bottom: 1px solid #eceff1;
       padding-bottom: 12px;
     }
-
     .guide-section:last-child {
       border-bottom: none;
       margin-bottom: 0;
     }
-
     .guide-section h3 {
       color: #1976d2;
       margin: 0 0 6px 0;
       font-size: 1.05rem;
     }
-
     .guide-section p {
       margin: 4px 0 8px 0;
       font-size: 0.92rem;
       line-height: 1.4;
       color: #455a64;
     }
-
     .court-diagram-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 12px;
       margin: 10px 0;
     }
-
     .court-card-info {
       background: #f1f8e9;
       border: 1px solid #c8e6c9;
@@ -559,23 +495,19 @@
       padding: 10px;
       font-size: 0.85rem;
     }
-
     .court-card-info.doubles {
       background: #e3f2fd;
       border-color: #bbdefb;
     }
-
     .court-card-info strong {
       display: block;
       color: #2e7d32;
       margin-bottom: 4px;
       font-size: 0.9rem;
     }
-
     .court-card-info.doubles strong {
       color: #1565c0;
     }
-
     /* Teacher Report Table */
     .report-table {
       width: 100%;
@@ -583,33 +515,27 @@
       margin-top: 12px;
       font-size: 0.85rem;
     }
-
     .report-table th, .report-table td {
       border: 1px solid #cfd8dc;
       padding: 6px 8px;
       text-align: left;
     }
-
     .report-table th {
       background: #eceff1;
       color: #37474f;
     }
-
     .badge-correct {
       color: #2e7d32;
       font-weight: bold;
     }
-
     .badge-retry {
       color: #f57c00;
       font-weight: bold;
     }
-
     .badge-unattempted {
       color: #90a4ae;
       font-style: italic;
     }
-
     .btn-copy-report {
       background: #2e7d32;
       color: white;
@@ -617,11 +543,9 @@
       width: 100%;
       padding: 10px;
     }
-
     .btn-copy-report:hover {
       background: #1b5e20;
     }
-
     /* Responsive */
     @media (max-width: 768px) {
       .game-container {
@@ -685,37 +609,32 @@
 
         <!-- Opponent Reach Zone (Visual Proximity) -->
         <div id="opponentReachZone" class="opponent-reach-zone" title="Opponent Reach Area"></div>
-
         <!-- Opponent Avatar (Red Triangle) -->
         <div id="opponentAvatar" class="entity-opponent" title="Opponent"></div>
-
         <!-- Player Avatar (Blue Circle) -->
         <div id="playerAvatar" class="entity-player" title="You">YOU</div>
 
         <!-- Draggable Shuttlecock Token -->
         <div id="shuttleToken" class="shuttlecock-token" title="Drag me to hit!">
-          <svg class="shuttle-svg" viewBox="0 0 100 100" fill="none">
-            <!-- Flared Feather Skirt Body -->
-            <path d="M 16,22 C 28,16 72,16 84,22 L 64,67 L 36,67 Z" fill="#ffffff" stroke="#cbd5e1" stroke-width="2" />
-            <!-- Overlapping Feather Tips Scallop -->
-            <path d="M 16,22 C 18,17 24,17 26,20 C 28,16 34,16 36,19 C 39,15 45,15 47,18 C 50,15 56,15 58,19 C 61,16 67,16 69,20 C 72,17 78,17 80,21 C 82,18 85,20 84,22" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.8" stroke-linecap="round" />
-            <!-- Feather Quills / Shafts -->
-            <line x1="22" y1="21" x2="38" y2="67" stroke="#94a3b8" stroke-width="1.8" stroke-linecap="round" />
-            <line x1="31" y1="18" x2="43" y2="67" stroke="#94a3b8" stroke-width="1.8" stroke-linecap="round" />
-            <line x1="42" y1="16.5" x2="48" y2="67" stroke="#94a3b8" stroke-width="1.8" stroke-linecap="round" />
-            <line x1="50" y1="16" x2="50" y2="67" stroke="#64748b" stroke-width="2.2" stroke-linecap="round" />
-            <line x1="58" y1="16.5" x2="52" y2="67" stroke="#94a3b8" stroke-width="1.8" stroke-linecap="round" />
-            <line x1="69" y1="18" x2="57" y2="67" stroke="#94a3b8" stroke-width="1.8" stroke-linecap="round" />
-            <line x1="78" y1="21" x2="62" y2="67" stroke="#94a3b8" stroke-width="1.8" stroke-linecap="round" />
-            <!-- Dual Binding Thread Stitches -->
-            <path d="M 23,36 Q 50,42 77,36" fill="none" stroke="#0284c7" stroke-width="2.2" stroke-dasharray="3.5 2" stroke-linecap="round" />
-            <path d="M 29,50 Q 50,55 71,50" fill="none" stroke="#0284c7" stroke-width="2.2" stroke-dasharray="3.5 2" stroke-linecap="round" />
-            <!-- Red Neck Ribbon Tape -->
-            <rect x="35" y="67" width="30" height="7" rx="2" fill="#e53935" stroke="#b71c1c" stroke-width="1.5" />
-            <line x1="36" y1="70.5" x2="64" y2="70.5" stroke="#ff8a80" stroke-width="1.2" />
-            <!-- Cork Dome Base -->
-            <path d="M 36,74 C 36,92 64,92 64,74 Z" fill="#fff9db" stroke="#f59f00" stroke-width="2" />
-            <path d="M 41,77 C 41,86 59,86 59,77" fill="none" stroke="#ffe066" stroke-width="1.5" />
+          <svg class="shuttle-svg" viewBox="0 0 100 100">
+            <!-- White Feathers Fan -->
+            <polygon points="26,70 50,16 74,70" fill="#f8fafc" stroke="#94a3b8" stroke-width="2.5" />
+            <!-- Feather Ribs & Quill Lines -->
+            <line x1="33" y1="54" x2="67" y2="54" stroke="#60a5fa" stroke-width="2" />
+            <line x1="40" y1="36" x2="60" y2="36" stroke="#60a5fa" stroke-width="2" />
+            <line x1="50" y1="16" x2="50" y2="70" stroke="#94a3b8" stroke-width="1.8" />
+            <line x1="50" y1="16" x2="38" y2="70" stroke="#cbd5e1" stroke-width="1.2" />
+            <line x1="50" y1="16" x2="62" y2="70" stroke="#cbd5e1" stroke-width="1.2" />
+            <!-- Feather Scalloped Tips -->
+            <circle cx="26" cy="70" r="3.5" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5" />
+            <circle cx="38" cy="70" r="3.5" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5" />
+            <circle cx="50" cy="70" r="3.5" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5" />
+            <circle cx="62" cy="70" r="3.5" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5" />
+            <circle cx="74" cy="70" r="3.5" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5" />
+            <!-- Red Collar Band -->
+            <rect x="33" y="67" width="34" height="6.5" fill="#e53935" rx="2" />
+            <!-- Rounded Amber Cork Dome -->
+            <path d="M 34,73 Q 50,92 66,73 Z" fill="#fef3c7" stroke="#d97706" stroke-width="2.2" />
           </svg>
         </div>
 
@@ -758,12 +677,11 @@
             <span><strong>Opponent Reach</strong></span>
           </div>
           <div class="legend-item">
-            <div class="legend-badge" style="background:#ffffff; border:1px solid #fbc02d; padding:2px;">
-              <svg viewBox="0 0 100 100" style="width:18px; height:18px;" fill="none">
-                <path d="M 16,22 C 28,16 72,16 84,22 L 64,67 L 36,67 Z" fill="#ffffff" stroke="#94a3b8" stroke-width="3" />
-                <path d="M 23,38 Q 50,44 77,38" fill="none" stroke="#0284c7" stroke-width="4" stroke-dasharray="4 3" />
-                <rect x="35" y="67" width="30" height="7" rx="2" fill="#e53935" />
-                <path d="M 36,74 C 36,92 64,92 64,74 Z" fill="#fff9db" stroke="#f59f00" stroke-width="3" />
+            <div class="legend-badge" style="background:#ffffff; border:1px solid #fbc02d;">
+              <svg viewBox="0 0 100 100" style="width:16px; height:16px;">
+                <polygon points="26,70 50,16 74,70" fill="#f8fafc" stroke="#94a3b8" stroke-width="3" />
+                <rect x="33" y="67" width="34" height="6.5" fill="#e53935" rx="2" />
+                <path d="M 34,73 Q 50,92 66,73 Z" fill="#fef3c7" stroke="#d97706" stroke-width="2.5" />
               </svg>
             </div>
             <span><strong>Shuttlecock</strong> (Drag)</span>
@@ -793,7 +711,6 @@
     <div class="modal-content">
       <button class="modal-close" id="btnCloseModal">&times;</button>
       <h2 class="modal-title">🏸 Badminton Singles & Rules Guide</h2>
-
       <div class="guide-section">
         <h3>1. Singles vs Doubles Boundaries</h3>
         <p>In Badminton, the court lines change depending on whether you are playing singles (1 vs 1) or doubles (2 vs 2):</p>
@@ -810,7 +727,6 @@
           </div>
         </div>
       </div>
-
       <div class="guide-section">
         <h3>2. Basic Badminton Rules</h3>
         <p>• <strong>Rally Point Scoring:</strong> Every rally won earns a point. First player to 21 points wins the set.</p>
@@ -818,11 +734,10 @@
         <p>• <strong>Even/Odd Service Rule:</strong> When your score is even (0, 2, 4...), serve from the right service court. When odd (1, 3, 5...), serve from the left court.</p>
         <p>• <strong>Common Faults:</strong> Hitting the shuttle into the net, shuttle landing out of boundary lines, touching the net with your racket or body, or hitting the shuttle twice before it crosses the net.</p>
       </div>
-
       <div class="guide-section">
         <h3>3. Singles Strategy Tips</h3>
         <p>🏸 <strong>Make them run:</strong> Place the shuttle diagonally opposite from where the opponent is standing (Four Corners strategy).</p>
-        <p>🎯 <strong>Avoid the reach zone:</strong> If you hit right back to the opponent, they can smash or kill the shuttlecock without running.</p>
+        <p>🎯 <strong>Avoid the reach zone:</strong> If you hit right back to the opponent, they can return the hit within one or two quick steps.</p>
       </div>
     </div>
   </div>
@@ -835,7 +750,6 @@
       <p style="margin: 0 0 10px 0; font-size:0.9rem; color:#546e7a;">
         Review your decision history below. You can copy this summary to paste into Singapore Student Learning Space (SLS).
       </p>
-
       <div style="background:#e8f5e9; padding:12px; border-radius:8px; display:flex; justify-content:space-between; align-items:center;">
         <div>
           <div style="font-size:1.15rem; font-weight:bold; color:#1b5e20;" id="reportTotalScore">Total Score: 0 / 21</div>
@@ -843,7 +757,6 @@
         </div>
         <div style="font-size:1.8rem;" id="reportGradeEmoji">🏸</div>
       </div>
-
       <div style="overflow-x:auto;">
         <table class="report-table">
           <thead>
@@ -860,7 +773,6 @@
           </tbody>
         </table>
       </div>
-
       <button type="button" class="btn-copy-report" id="btnCopyReport">📋 Copy Summary for SLS Submission</button>
       <div id="copyToast" style="text-align:center; font-size:0.85rem; color:#2e7d32; margin-top:6px; display:none;">
         ✅ Summary copied to clipboard! Ready to paste into SLS.
@@ -905,7 +817,7 @@
         evaluator: (x, y) => checkPlacement(x, y, 78, 14, {
           targetDesc: "front net on the left side",
           isIdeal: (tx, ty) => ty >= 28 && ty <= 48 && tx <= 45,
-          successMsg: "🌟 Excellent drop shot! You made your opponent run diagonally across the entire court from the deep corner to the front net."
+          successMsg: "🌟 Excellent drop shot! You placed it softly near the front net, forcing your opponent to sprint diagonally across the whole court."
         })
       },
       {
@@ -920,7 +832,7 @@
         evaluator: (x, y) => checkPlacement(x, y, 22, 28, {
           targetDesc: "wide right open court",
           isIdeal: (tx, ty) => tx >= 60,
-          successMsg: "🌟 Brilliant cross-court shot! The entire right side was completely unprotected, catching your opponent off balance!"
+          successMsg: "🌟 Brilliant cross-court shot! The entire right side was completely open, making it impossible for the opponent to cover in time!"
         })
       },
       {
@@ -935,7 +847,7 @@
         evaluator: (x, y) => checkPlacement(x, y, 50, 12, {
           targetDesc: "short front net area",
           isIdeal: (tx, ty) => ty >= 30 && ty <= 48,
-          successMsg: "🌟 Great drop shot! Landing the shuttle tight at the net forces them to sprint all the way from the baseline."
+          successMsg: "🌟 Great drop shot! Landing the shuttle tight at the front net forces your opponent to sprint forward from the baseline."
         })
       },
       {
@@ -950,7 +862,7 @@
         evaluator: (x, y) => checkPlacement(x, y, 50, 38, {
           targetDesc: "deep rear baseline corners",
           isIdeal: (tx, ty) => ty <= 20 && (tx <= 34 || tx >= 66),
-          successMsg: "🌟 Masterclass clear shot! You lifted it high over their head into the deep corner, completely bypassing their net block!"
+          successMsg: "🌟 Masterclass clear shot! You lifted it high over their head into the deep corner, completely bypassing their net guard!"
         })
       },
       {
@@ -1196,7 +1108,7 @@
     ];
 
     /* ========================================================
-       TACTICAL EVALUATION ENGINE (No raw percentage feedback!)
+       TACTICAL EVALUATION ENGINE (Detailed Area & Movement Feedback)
        ======================================================== */
     function checkPlacement(x, y, oppX, oppY, config) {
       // 1. Boundary & Net validations
@@ -1207,32 +1119,80 @@
         };
       }
       if (x < 11 || x > 89 || y < 5) {
+        let outDetail = "In singles, the inner sideline is the boundary.";
+        if (x < 11 || x > 89) {
+          outDetail = "The shuttlecock landed wide outside the singles sideline (in the tramlines).";
+        } else if (y < 5) {
+          outDetail = "The shuttlecock flew too long past the opponent's rear baseline.";
+        }
         return {
           result: 'improve',
-          msg: "⚠️ Out of bounds! In singles, the inner sideline is the boundary. Keep the shuttle inside the white court lines."
+          msg: `⚠️ Out of bounds! ${outDetail} Keep the shuttlecock inside the white court boundary lines.`
         };
       }
 
-      // 2. Opponent Reach Proximity Check
+      // 2. Opponent Reach Proximity Check (1 or 2 steps realistic feedback)
       const dist = Math.hypot(x - oppX, y - oppY);
       if (dist < REACH_RADIUS) {
-        return {
-          result: 'improve',
-          msg: "⚠️ Too close to the opponent! The opponent is standing right inside this reach circle and can intercept or smash your shot without moving. Aim into open space!"
-        };
+        // Specific feedback depending on court areas
+        if (oppY >= 32 && y >= 30) {
+          // Both near the net
+          return {
+            result: 'improve',
+            msg: "⚠️ Too close to the front net! Your opponent is already guarding the net and can return the hit within one or two quick steps. Try a high lift over their head to the deep backcourt!"
+          };
+        } else if (oppY <= 22 && y <= 24) {
+          // Both near the baseline
+          return {
+            result: 'improve',
+            msg: "⚠️ Too close to the rear baseline! Your opponent is already waiting deep and can return the hit within one or two steps. Try a gentle drop shot tight to the front net!"
+          };
+        } else if (Math.abs(x - oppX) < 14) {
+          // Hit straight at the opponent's body/path
+          return {
+            result: 'improve',
+            msg: "⚠️ Hit straight to the opponent! They don't need to run far and can return the hit within one or two steps. Look for the wide open corners instead!"
+          };
+        } else {
+          return {
+            result: 'improve',
+            msg: "⚠️ Too close to the opponent! The opponent can return the hit within one or two steps. Aim into open space further away from them!"
+          };
+        }
       }
 
-      // 3. Ideal Target Assessment
+      // 3. Ideal Target Assessment & Specific Area Praise
       if (config.isIdeal(x, y)) {
         return {
           result: 'good',
           msg: config.successMsg
         };
       } else {
-        return {
-          result: 'good',
-          msg: `Good shot! You placed the shuttlecock away from your opponent's reach circle, forcing them to run.`
-        };
+        // Context-specific feedback for general safe placement
+        if (y >= 30 && y <= 48) {
+          // Drop shot near net
+          return {
+            result: 'good',
+            msg: "🌟 Good drop shot near the net! Placing it softly in front forces your opponent to lunge forward quickly."
+          };
+        } else if (y <= 22 && (x <= 35 || x >= 65)) {
+          // Deep corner placement
+          return {
+            result: 'good',
+            msg: "🌟 Great deep shot into the corner! Placing it near the back corner pushes your opponent far away from the center."
+          };
+        } else if ((x >= 12 && x <= 25) || (x >= 75 && x <= 88)) {
+          // Sideline shot
+          return {
+            result: 'good',
+            msg: "🌟 Nice shot hugging the sideline! You pulled your opponent wide across the court away from their comfort zone."
+          };
+        } else {
+          return {
+            result: 'good',
+            msg: "🌟 Good shot! You placed the shuttlecock away from your opponent's reach, forcing them to run across the court."
+          };
+        }
       }
     }
 
@@ -1244,7 +1204,7 @@
     let courtRect = null;
 
     // Student performance history for SLS Teacher Review
-    const studentHistory = SCENARIOS.map((sc, i) => ({
+    const studentHistory = SCENARIOS.map((sc) => ({
       scenarioId: sc.id,
       title: sc.title,
       tacticalFocus: sc.tacticalFocus,
@@ -1263,18 +1223,15 @@
     const playerAvatar = document.getElementById('playerAvatar');
     const shuttleToken = document.getElementById('shuttleToken');
     const svgIncomingPath = document.getElementById('svgIncomingPath');
-
     const topProgressBadge = document.getElementById('topProgressBadge');
     const topScoreBadge = document.getElementById('topScoreBadge');
     const scenarioNumberEl = document.getElementById('scenarioNumber');
     const scenarioScoreStatus = document.getElementById('scenarioScoreStatus');
     const incomingBadge = document.getElementById('incomingBadge');
     const scenarioPromptEl = document.getElementById('scenarioPrompt');
-
     const feedbackBox = document.getElementById('feedbackBox');
     const feedbackStatus = document.getElementById('feedbackStatus');
     const feedbackDetail = document.getElementById('feedbackDetail');
-
     const btnPrev = document.getElementById('btnPrev');
     const btnNext = document.getElementById('btnNext');
     const btnResetShot = document.getElementById('btnResetShot');
@@ -1297,34 +1254,31 @@
     const reportGradeEmoji = document.getElementById('reportGradeEmoji');
 
     // Web Audio Synthesizer
-    let audioCtx = null;
-    function playBeep(isSuccess) {
-      try {
-        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        if (audioCtx.state === 'suspended') audioCtx.resume();
-        const now = audioCtx.currentTime;
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
-        if (isSuccess) {
-          osc.frequency.setValueAtTime(523, now);
-          osc.frequency.exponentialRampToValueAtTime(1046, now + 0.18);
-          gain.gain.setValueAtTime(0.2, now);
-          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
-          osc.start(now);
-          osc.stop(now + 0.25);
-        } else {
-          osc.frequency.setValueAtTime(280, now);
-          osc.frequency.setValueAtTime(180, now + 0.15);
-          gain.gain.setValueAtTime(0.25, now);
-          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
-          osc.start(now);
-          osc.stop(now + 0.3);
-        }
-      } catch (err) {
-        // Audio optional fallback
+    function playBeep(isSuccess) {
+      if (!audioCtx) return;
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      const now = audioCtx.currentTime;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+
+      if (isSuccess) {
+        osc.frequency.setValueAtTime(523, now);
+        osc.frequency.exponentialRampToValueAtTime(1046, now + 0.18);
+        gain.gain.setValueAtTime(0.2, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+        osc.start(now);
+        osc.stop(now + 0.25);
+      } else {
+        osc.frequency.setValueAtTime(280, now);
+        osc.frequency.setValueAtTime(180, now + 0.15);
+        gain.gain.setValueAtTime(0.25, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+        osc.start(now);
+        osc.stop(now + 0.3);
       }
     }
 
@@ -1461,6 +1415,7 @@
       }
 
       updateGlobalStats();
+
       if (record.completed) {
         scenarioScoreStatus.textContent = record.solvedOnFirstTry ? "✅ 1 Point Earned" : "🔄 Completed";
       }
@@ -1481,7 +1436,7 @@
       }
 
       reportTableBody.innerHTML = '';
-      studentHistory.forEach((h, idx) => {
+      studentHistory.forEach((h) => {
         const row = document.createElement('tr');
         let statusText = '';
         if (h.status === 'correct') {
@@ -1512,7 +1467,6 @@
       text += `Total Score: ${totalScore} / ${SCENARIOS.length}\n`;
       text += `Scenarios Completed: ${completedCount} / ${SCENARIOS.length}\n\n`;
       text += `DETAILED SCENARIO RECORD:\n`;
-
       studentHistory.forEach(h => {
         const resultLabel = h.status === 'correct' ? 'PASSED (1st try)' : (h.status === 'retry-passed' ? 'PASSED (Retried)' : 'NOT DONE');
         text += `- Scenario ${h.scenarioId} [${h.tacticalFocus}]: ${resultLabel} (${h.attempts} attempts)\n`;
@@ -1556,7 +1510,6 @@
       e.preventDefault();
       rulesModal.classList.add('active');
     });
-
     btnCloseModal.addEventListener('click', () => rulesModal.classList.remove('active'));
     btnOpenReport.addEventListener('click', openReportModal);
     btnCloseReport.addEventListener('click', () => reportModal.classList.remove('active'));
@@ -1574,4 +1527,3 @@
   </script>
 </body>
 </html>
-```
