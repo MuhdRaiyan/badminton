@@ -97,6 +97,7 @@
       font-weight: 600;
       transition: background 0.2s;
     }
+
     .btn-report-quick:hover {
       background: #455a64;
     }
@@ -235,11 +236,12 @@
       100% { transform: scale(1.14); }
     }
 
-    /* Shuttlecock Vector Icon SVG */
+    /* Refined Shuttlecock Vector Icon SVG */
     .shuttle-svg {
-      width: 28px;
-      height: 28px;
+      width: 30px;
+      height: 30px;
       pointer-events: none;
+      display: block;
     }
 
     /* Trajectory arrow from opponent to incoming shuttle */
@@ -271,6 +273,7 @@
       border: 1px solid rgba(255, 255, 255, 0.3);
       transition: background 0.2s;
     }
+
     .court-info-corner:hover {
       background: rgba(0, 0, 0, 0.85);
     }
@@ -442,6 +445,7 @@
       color: #455a64;
       flex: 0.8;
     }
+
     .btn-prev:hover {
       background: #cfd8dc;
     }
@@ -613,6 +617,7 @@
       width: 100%;
       padding: 10px;
     }
+
     .btn-copy-report:hover {
       background: #1b5e20;
     }
@@ -636,7 +641,6 @@
   </style>
 </head>
 <body>
-
   <header>
     <h1>🏸 Badminton Singles: Smart Placement Challenge!</h1>
     <p class="subtitle">Read the opponent's position and hit the shuttlecock into open space away from their reach!</p>
@@ -657,31 +661,23 @@
         <svg class="court-svg" viewBox="0 0 100 170" preserveAspectRatio="none">
           <!-- Singles Outer Boundary -->
           <rect x="5" y="5" width="90" height="160" fill="none" stroke="#ffffff" stroke-width="1.8" />
-
           <!-- Singles Side Lines (Inner lines) -->
           <line x1="11" y1="5" x2="11" y2="165" stroke="#ffffff" stroke-width="1.3" opacity="0.95" />
           <line x1="89" y1="5" x2="89" y2="165" stroke="#ffffff" stroke-width="1.3" opacity="0.95" />
-
           <!-- Doubles Long Service Lines -->
           <line x1="5" y1="14" x2="95" y2="14" stroke="#ffffff" stroke-width="1.0" opacity="0.6" stroke-dasharray="2 1" />
           <line x1="5" y1="156" x2="95" y2="156" stroke="#ffffff" stroke-width="1.0" opacity="0.6" stroke-dasharray="2 1" />
-
           <!-- Short Service Lines -->
           <line x1="5" y1="67" x2="95" y2="67" stroke="#ffffff" stroke-width="1.4" />
           <line x1="5" y1="103" x2="95" y2="103" stroke="#ffffff" stroke-width="1.4" />
-
           <!-- Center Net -->
           <line x1="2" y1="85" x2="98" y2="85" stroke="#ffe082" stroke-width="3" stroke-dasharray="3 1" />
-
           <!-- Center Line (Opponent side) -->
           <line x1="50" y1="5" x2="50" y2="67" stroke="#ffffff" stroke-width="1.2" />
-
           <!-- Center Line (Player side) -->
           <line x1="50" y1="103" x2="50" y2="165" stroke="#ffffff" stroke-width="1.2" />
-
           <!-- Dynamic Trajectory Line SVG overlay -->
           <line id="svgIncomingPath" x1="0" y1="0" x2="0" y2="0" stroke="#ffeb3b" stroke-width="1.8" stroke-dasharray="2 1.5" opacity="0.8" />
-
           <!-- Net post markers -->
           <circle cx="4" cy="85" r="2.5" fill="#ffd54f" />
           <circle cx="96" cy="85" r="2.5" fill="#ffd54f" />
@@ -698,16 +694,28 @@
 
         <!-- Draggable Shuttlecock Token -->
         <div id="shuttleToken" class="shuttlecock-token" title="Drag me to hit!">
-          <svg class="shuttle-svg" viewBox="0 0 100 100">
-            <!-- White Feathers -->
-            <polygon points="30,72 50,18 70,72" fill="#f8fafc" stroke="#94a3b8" stroke-width="3" />
-            <line x1="36" y1="52" x2="64" y2="52" stroke="#cbd5e1" stroke-width="2.5" />
-            <line x1="42" y1="36" x2="58" y2="36" stroke="#cbd5e1" stroke-width="2.5" />
-            <line x1="50" y1="18" x2="50" y2="72" stroke="#94a3b8" stroke-width="2" />
-            <!-- Collar Band -->
-            <rect x="36" y="68" width="28" height="6" fill="#e53935" rx="2" />
-            <!-- Rounded Cork Base -->
-            <path d="M 37,74 Q 50,92 63,74 Z" fill="#ffffff" stroke="#cbd5e1" stroke-width="2.5" />
+          <svg class="shuttle-svg" viewBox="0 0 100 100" fill="none">
+            <!-- Flared Feather Skirt Body -->
+            <path d="M 16,22 C 28,16 72,16 84,22 L 64,67 L 36,67 Z" fill="#ffffff" stroke="#cbd5e1" stroke-width="2" />
+            <!-- Overlapping Feather Tips Scallop -->
+            <path d="M 16,22 C 18,17 24,17 26,20 C 28,16 34,16 36,19 C 39,15 45,15 47,18 C 50,15 56,15 58,19 C 61,16 67,16 69,20 C 72,17 78,17 80,21 C 82,18 85,20 84,22" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.8" stroke-linecap="round" />
+            <!-- Feather Quills / Shafts -->
+            <line x1="22" y1="21" x2="38" y2="67" stroke="#94a3b8" stroke-width="1.8" stroke-linecap="round" />
+            <line x1="31" y1="18" x2="43" y2="67" stroke="#94a3b8" stroke-width="1.8" stroke-linecap="round" />
+            <line x1="42" y1="16.5" x2="48" y2="67" stroke="#94a3b8" stroke-width="1.8" stroke-linecap="round" />
+            <line x1="50" y1="16" x2="50" y2="67" stroke="#64748b" stroke-width="2.2" stroke-linecap="round" />
+            <line x1="58" y1="16.5" x2="52" y2="67" stroke="#94a3b8" stroke-width="1.8" stroke-linecap="round" />
+            <line x1="69" y1="18" x2="57" y2="67" stroke="#94a3b8" stroke-width="1.8" stroke-linecap="round" />
+            <line x1="78" y1="21" x2="62" y2="67" stroke="#94a3b8" stroke-width="1.8" stroke-linecap="round" />
+            <!-- Dual Binding Thread Stitches -->
+            <path d="M 23,36 Q 50,42 77,36" fill="none" stroke="#0284c7" stroke-width="2.2" stroke-dasharray="3.5 2" stroke-linecap="round" />
+            <path d="M 29,50 Q 50,55 71,50" fill="none" stroke="#0284c7" stroke-width="2.2" stroke-dasharray="3.5 2" stroke-linecap="round" />
+            <!-- Red Neck Ribbon Tape -->
+            <rect x="35" y="67" width="30" height="7" rx="2" fill="#e53935" stroke="#b71c1c" stroke-width="1.5" />
+            <line x1="36" y1="70.5" x2="64" y2="70.5" stroke="#ff8a80" stroke-width="1.2" />
+            <!-- Cork Dome Base -->
+            <path d="M 36,74 C 36,92 64,92 64,74 Z" fill="#fff9db" stroke="#f59f00" stroke-width="2" />
+            <path d="M 41,77 C 41,86 59,86 59,77" fill="none" stroke="#ffe066" stroke-width="1.5" />
           </svg>
         </div>
 
@@ -750,10 +758,12 @@
             <span><strong>Opponent Reach</strong></span>
           </div>
           <div class="legend-item">
-            <div class="legend-badge" style="background:#ffffff; border:1px solid #fbc02d;">
-              <svg viewBox="0 0 100 100" style="width:16px; height:16px;">
-                <polygon points="30,72 50,18 70,72" fill="#ffffff" stroke="#666" stroke-width="4" />
-                <path d="M 37,74 Q 50,92 63,74 Z" fill="#eee" />
+            <div class="legend-badge" style="background:#ffffff; border:1px solid #fbc02d; padding:2px;">
+              <svg viewBox="0 0 100 100" style="width:18px; height:18px;" fill="none">
+                <path d="M 16,22 C 28,16 72,16 84,22 L 64,67 L 36,67 Z" fill="#ffffff" stroke="#94a3b8" stroke-width="3" />
+                <path d="M 23,38 Q 50,44 77,38" fill="none" stroke="#0284c7" stroke-width="4" stroke-dasharray="4 3" />
+                <rect x="35" y="67" width="30" height="7" rx="2" fill="#e53935" />
+                <path d="M 36,74 C 36,92 64,92 64,74 Z" fill="#fff9db" stroke="#f59f00" stroke-width="3" />
               </svg>
             </div>
             <span><strong>Shuttlecock</strong> (Drag)</span>
@@ -802,7 +812,7 @@
       </div>
 
       <div class="guide-section">
-        <h3>2. Basic Badminton Rules (Primary 4 PE)</h3>
+        <h3>2. Basic Badminton Rules</h3>
         <p>• <strong>Rally Point Scoring:</strong> Every rally won earns a point. First player to 21 points wins the set.</p>
         <p>• <strong>Serving:</strong> The shuttle must be hit below waist level and diagonally across the net past the opponent's short service line.</p>
         <p>• <strong>Even/Odd Service Rule:</strong> When your score is even (0, 2, 4...), serve from the right service court. When odd (1, 3, 5...), serve from the left court.</p>
@@ -1287,31 +1297,34 @@
     const reportGradeEmoji = document.getElementById('reportGradeEmoji');
 
     // Web Audio Synthesizer
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    let audioCtx = null;
     function playBeep(isSuccess) {
-      if (!audioCtx) return;
-      if (audioCtx.state === 'suspended') audioCtx.resume();
+      try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const now = audioCtx.currentTime;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
 
-      const now = audioCtx.currentTime;
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-
-      if (isSuccess) {
-        osc.frequency.setValueAtTime(523, now);
-        osc.frequency.exponentialRampToValueAtTime(1046, now + 0.18);
-        gain.gain.setValueAtTime(0.2, now);
-        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
-        osc.start(now);
-        osc.stop(now + 0.25);
-      } else {
-        osc.frequency.setValueAtTime(280, now);
-        osc.frequency.setValueAtTime(180, now + 0.15);
-        gain.gain.setValueAtTime(0.25, now);
-        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
-        osc.start(now);
-        osc.stop(now + 0.3);
+        if (isSuccess) {
+          osc.frequency.setValueAtTime(523, now);
+          osc.frequency.exponentialRampToValueAtTime(1046, now + 0.18);
+          gain.gain.setValueAtTime(0.2, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+          osc.start(now);
+          osc.stop(now + 0.25);
+        } else {
+          osc.frequency.setValueAtTime(280, now);
+          osc.frequency.setValueAtTime(180, now + 0.15);
+          gain.gain.setValueAtTime(0.25, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+          osc.start(now);
+          osc.stop(now + 0.3);
+        }
+      } catch (err) {
+        // Audio optional fallback
       }
     }
 
@@ -1336,7 +1349,6 @@
       // Position Opponent & Proximity Reach Zone
       opponentAvatar.style.left = `${sc.opponentPos.x}%`;
       opponentAvatar.style.top = `${sc.opponentPos.y}%`;
-
       opponentReachZone.style.left = `${sc.opponentPos.x}%`;
       opponentReachZone.style.top = `${sc.opponentPos.y}%`;
 
@@ -1394,7 +1406,6 @@
     function onPointerMove(e) {
       if (!isDragging) return;
       courtRect = courtWrapper.getBoundingClientRect();
-
       let xPercent = ((e.clientX - courtRect.left) / courtRect.width) * 100;
       let yPercent = ((e.clientY - courtRect.top) / courtRect.height) * 100;
 
@@ -1450,7 +1461,6 @@
       }
 
       updateGlobalStats();
-
       if (record.completed) {
         scenarioScoreStatus.textContent = record.solvedOnFirstTry ? "✅ 1 Point Earned" : "🔄 Completed";
       }
@@ -1473,7 +1483,6 @@
       reportTableBody.innerHTML = '';
       studentHistory.forEach((h, idx) => {
         const row = document.createElement('tr');
-
         let statusText = '';
         if (h.status === 'correct') {
           statusText = '<span class="badge-correct">⭐ Correct (1st Try)</span>';
@@ -1503,6 +1512,7 @@
       text += `Total Score: ${totalScore} / ${SCENARIOS.length}\n`;
       text += `Scenarios Completed: ${completedCount} / ${SCENARIOS.length}\n\n`;
       text += `DETAILED SCENARIO RECORD:\n`;
+
       studentHistory.forEach(h => {
         const resultLabel = h.status === 'correct' ? 'PASSED (1st try)' : (h.status === 'retry-passed' ? 'PASSED (Retried)' : 'NOT DONE');
         text += `- Scenario ${h.scenarioId} [${h.tacticalFocus}]: ${resultLabel} (${h.attempts} attempts)\n`;
@@ -1530,7 +1540,6 @@
       if (currentScenarioIndex < SCENARIOS.length - 1) {
         loadScenario(currentScenarioIndex + 1);
       } else {
-        // Automatically open the report modal when student reaches the end of scenario 21!
         openReportModal();
       }
     });
@@ -1547,8 +1556,8 @@
       e.preventDefault();
       rulesModal.classList.add('active');
     });
-    btnCloseModal.addEventListener('click', () => rulesModal.classList.remove('active'));
 
+    btnCloseModal.addEventListener('click', () => rulesModal.classList.remove('active'));
     btnOpenReport.addEventListener('click', openReportModal);
     btnCloseReport.addEventListener('click', () => reportModal.classList.remove('active'));
     btnCopyReport.addEventListener('click', copyReportToClipboard);
@@ -1565,3 +1574,4 @@
   </script>
 </body>
 </html>
+```
