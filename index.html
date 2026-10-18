@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Badminton Singles Tactical Game - P4 PE</title>
+  <title>Badminton Singles Tactical Decision Game</title>
   <style>
     :root {
       --court-green: #2e7d32;
@@ -796,7 +796,7 @@
     </div>
     <div class="modal-body">
       <p>In badminton, court boundaries change depending on whether you play <strong>Singles</strong> (1 vs 1) or <strong>Doubles</strong> (2 vs 2).</p>
-      
+
       <div class="rules-comparison-grid">
         <div class="rules-card">
           <h4>👤 Singles Match</h4>
@@ -818,7 +818,7 @@
         </div>
       </div>
 
-      <h4 style="margin-top: 16px; color:#0f172a;">⭐ Key Rules for P4 Physical Education</h4>
+      <h4 style="margin-top: 16px; color:#0f172a;">⭐ Key Badminton Rules</h4>
       <ul class="rules-list">
         <li><strong>Rally Point Scoring:</strong> Every rally earns 1 point for whoever wins it. First to 21 points wins the game.</li>
         <li><strong>Underhand Serve:</strong> The shuttlecock must be struck below waist level diagonally into the opponent's service box.</li>
@@ -944,7 +944,7 @@
       opp: { x: 76, y: 52 },
       player: { x: 22, y: 150 },
       shuttle: { x: 22, y: 147 },
-      targetZones: [{ minX: 15, maxX: 40, minY: 12, maxY: 60, desc: "Entire left court" }]
+      targetZones: [{ minX: 15, maxX: 40, minY: 12, maxY: 60, desc: "Entire left court" } }]
     },
     {
       id: 8,
@@ -1288,7 +1288,7 @@
       feedbackBox.className = 'feedback-box warn';
       feedbackIcon.innerText = '⚠️';
       feedbackText.innerText = 'Out of bounds! In a singles match, shots outside the inner sidelines or behind the baseline are faults.';
-      
+
       // Opponent watches it land out (no reach movement needed)
       return;
     }
@@ -1315,7 +1315,7 @@
       feedbackBox.className = 'feedback-box warn';
       feedbackIcon.innerText = '🛡️';
       feedbackText.innerText = 'Intercepted! You placed the shuttlecock right inside the opponent\'s reach zone. Watch how easily the opponent moved to strike it! Click "Reset Shot" to aim into open space.';
-      
+
       if (stat.solvedFirstTry === null) {
         stat.solvedFirstTry = false;
       }
